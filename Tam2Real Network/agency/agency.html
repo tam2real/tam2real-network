@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TamBuilds — Web Design for Real Businesses</title>
+<meta name="description" content="TamBuilds — Custom websites, inventory systems, and online stores for small businesses. No templates, no fluff. Real results.">
+<meta property="og:title" content="TamBuilds — Web Design for Real Businesses">
+<meta property="og:description" content="Professional websites built for the streets. Proposal builder, inventory systems, and pricing sheets included.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f5c842">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060608;
+  --surface: #0e0e15;
+  --surface2: #16161f;
+  --gold: #f5c842;
+  --gold2: #e8b800;
+  --red: #e63946;
+  --white: #f2f1f7;
+  --muted: #6b6b82;
+  --border: rgba(245,200,66,0.1);
+  --border2: rgba(245,200,66,0.22);
+  --display: 'Bebas Neue', sans-serif;
+  --body: 'Barlow', sans-serif;
+  --condensed: 'Barlow Condensed', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--white); font-family: var(--body); overflow-x: hidden; }
+
+/* NOISE */
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity: 0.6;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 62px; padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(6,6,8,0.9); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: var(--display); font-size: 24px; letter-spacing: 4px; color: var(--gold); }
+.nav-logo span { color: var(--white); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-family: var(--condensed); font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--gold); }
+.nav-cta {
+  padding: 10px 22px; background: var(--gold); color: #000;
+  font-family: var(--condensed); font-size: 12px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  transition: all 0.2s;
+}
+.nav-cta:hover { background: #fff; transform: translateY(-1px); }
+@media(max-width:680px){ .nav-links { display: none; } .nav-cta { display: none; } }
+.mobile-tool-bar { display: none; }
+@media(max-width:680px){
+  .mobile-tool-bar {
+    display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;
+    background: rgba(6,6,8,0.95); border-bottom: 1px solid rgba(245,200,66,0.15);
+    padding: 8px 1rem; position: fixed; top: 62px; left: 0; right: 0; z-index: 190;
+  }
+  .mobile-tool-bar a {
+    padding: 6px 12px; font-family: var(--condensed); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    text-decoration: none; border: 1px solid var(--border2); white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .mobile-tool-bar a:hover { color: var(--gold); border-color: var(--gold); }
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: 100px 2rem 4rem; position: relative; overflow: hidden;
+}
+.hero-glow {
+  position: absolute; top: -200px; right: -200px;
+  width: 700px; height: 700px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,200,66,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(245,200,66,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,200,66,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+.hero-eyebrow {
+  font-family: var(--condensed); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem;
+}
+.hero-eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--gold); }
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(72px, 12vw, 160px);
+  line-height: 0.88; letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+}
+.hero-title .outline {
+  -webkit-text-stroke: 2px var(--gold);
+  color: transparent;
+}
+.hero-title .solid { color: var(--gold); }
+.hero-sub {
+  font-size: 17px; color: rgba(242,241,247,0.6); line-height: 1.65;
+  max-width: 480px; margin-bottom: 2.5rem; font-family: var(--condensed);
+  letter-spacing: 0.04em;
+}
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 3rem; }
+.btn-gold {
+  padding: 15px 32px; background: var(--gold); color: #000;
+  font-family: var(--condensed); font-size: 14px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-gold:hover { background: #fff; transform: translateY(-2px); }
+.btn-ghost {
+  padding: 14px 32px; background: transparent; color: var(--white);
+  font-family: var(--condensed); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+  border: 1px solid var(--border2);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+.hero-stats { display: flex; gap: 3rem; }
+.stat { }
+.stat-num { font-family: var(--display); font-size: 38px; color: var(--gold); letter-spacing: 2px; line-height: 1; }
+.stat-label { font-family: var(--condensed); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 2px; }
+
+/* TICKER */
+.ticker { background: var(--gold); padding: 10px 0; overflow: hidden; }
+.ticker-inner { display: flex; white-space: nowrap; animation: tick 25s linear infinite; }
+@keyframes tick { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.ticker-item {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--condensed); font-size: 12px; font-weight: 900;
+  letter-spacing: 0.15em; text-transform: uppercase; color: #000; padding: 0 2.5rem;
+}
+.ticker-dot { width: 5px; height: 5px; background: rgba(0,0,0,0.3); border-radius: 50%; }
+
+/* SECTIONS */
+section { padding: 6rem 2rem; }
+.container { max-width: 1100px; margin: 0 auto; }
+.s-eyebrow {
+  font-family: var(--condensed); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;
+}
+.s-eyebrow::before { content: ''; width: 20px; height: 2px; background: var(--gold); }
+.s-title { font-family: var(--display); font-size: clamp(40px, 6vw, 72px); letter-spacing: 2px; line-height: 0.92; margin-bottom: 1rem; }
+
+/* WORK */
+.work-wrap { background: var(--surface); }
+.work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); margin-top: 3rem; }
+@media(max-width:680px){ .work-grid { grid-template-columns: 1fr; } }
+.work-card {
+  background: var(--bg); padding: 2.5rem 2rem; position: relative; overflow: hidden;
+  transition: background 0.3s;
+}
+.work-card:hover { background: var(--surface2); }
+.work-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+.work-card:hover::before { transform: scaleX(1); }
+.work-num { font-family: var(--display); font-size: 64px; color: rgba(245,200,66,0.06); position: absolute; top: 1rem; right: 1.5rem; letter-spacing: 2px; }
+.work-industry { font-family: var(--condensed); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.work-name { font-family: var(--display); font-size: 32px; letter-spacing: 1px; margin-bottom: 8px; }
+.work-desc { font-size: 14px; color: rgba(242,241,247,0.55); line-height: 1.65; margin-bottom: 1rem; max-width: 340px; }
+.work-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.work-tag {
+  font-family: var(--condensed); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 10px; border: 1px solid var(--border2); color: var(--muted);
+}
+
+/* SERVICES */
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 3rem; }
+@media(max-width:760px){ .services-grid { grid-template-columns: 1fr; } }
+.service-card {
+  background: var(--surface); padding: 2rem 1.75rem; border-top: 3px solid transparent; transition: all 0.3s;
+}
+.service-card:hover { background: var(--surface2); border-top-color: var(--gold); }
+.service-icon { font-size: 28px; margin-bottom: 1rem; }
+.service-name { font-family: var(--display); font-size: 26px; letter-spacing: 1px; margin-bottom: 6px; }
+.service-price { font-family: var(--condensed); font-size: 13px; color: var(--gold); font-weight: 700; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+.service-desc { font-size: 14px; color: rgba(242,241,247,0.55); line-height: 1.65; margin-bottom: 1rem; }
+.service-includes { list-style: none; }
+.service-includes li { font-family: var(--condensed); font-size: 13px; color: rgba(242,241,247,0.65); padding: 5px 0; border-bottom: 1px solid var(--border); letter-spacing: 0.04em; }
+.service-includes li:last-child { border-bottom: none; }
+.service-includes li::before { content: '→ '; color: var(--gold); }
+.service-badge {
+  display: inline-block; padding: 3px 10px; background: var(--gold); color: #000;
+  font-family: var(--condensed); font-size: 10px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+/* WHY */
+.why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+@media(max-width:760px){ .why-grid { grid-template-columns: 1fr; gap: 2rem; } }
+.why-points { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+.why-point { display: flex; gap: 1rem; align-items: flex-start; }
+.why-icon { font-size: 22px; margin-top: 2px; flex-shrink: 0; }
+.why-point-title { font-family: var(--condensed); font-size: 16px; font-weight: 700; letter-spacing: 0.06em; color: var(--white); margin-bottom: 4px; }
+.why-point-desc { font-size: 14px; color: rgba(242,241,247,0.55); line-height: 1.65; }
+.why-card {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-top: 4px solid var(--gold); padding: 2.5rem 2rem;
+}
+.why-card-title { font-family: var(--display); font-size: 42px; letter-spacing: 2px; color: var(--gold); margin-bottom: 0.5rem; line-height: 1; }
+.why-card-sub { font-family: var(--condensed); font-size: 13px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; }
+.why-card-list { display: flex; flex-direction: column; gap: 10px; }
+.why-card-item { padding: 10px 12px; background: var(--surface2); border-left: 2px solid var(--gold); font-family: var(--condensed); font-size: 14px; color: var(--white); letter-spacing: 0.05em; }
+
+/* PROCESS */
+.process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); margin-top: 3rem; }
+@media(max-width:760px){ .process-steps { grid-template-columns: repeat(2,1fr); } }
+.process-step { background: var(--surface); padding: 2rem 1.5rem; }
+.step-num { font-family: var(--display); font-size: 52px; color: var(--gold); letter-spacing: 2px; line-height: 1; margin-bottom: 0.5rem; }
+.step-title { font-family: var(--condensed); font-size: 16px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.step-desc { font-size: 13px; color: rgba(242,241,247,0.5); line-height: 1.6; }
+
+/* NICHES */
+.niches-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 2.5rem; }
+@media(max-width:680px){ .niches-grid { grid-template-columns: repeat(2, 1fr); } }
+.niche-card {
+  padding: 1.5rem 1.25rem; border: 1px solid var(--border);
+  background: var(--surface); transition: all 0.25s;
+}
+.niche-card:hover { border-color: var(--border2); background: var(--surface2); transform: translateY(-2px); }
+.niche-emoji { font-size: 24px; margin-bottom: 8px; }
+.niche-name { font-family: var(--condensed); font-size: 15px; font-weight: 700; letter-spacing: 0.06em; margin-bottom: 4px; }
+.niche-note { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* CTA */
+.cta-wrap {
+  background: var(--gold); padding: 5rem 2rem; text-align: center; position: relative; overflow: hidden;
+}
+.cta-wrap::before {
+  content: 'TAMBUILDS';
+  position: absolute; font-family: var(--display); font-size: 200px;
+  color: rgba(0,0,0,0.06); top: 50%; left: 50%; transform: translate(-50%,-50%);
+  white-space: nowrap; pointer-events: none; letter-spacing: 10px;
+}
+.cta-wrap h2 { font-family: var(--display); font-size: clamp(40px,7vw,80px); color: #000; letter-spacing: 3px; line-height: 0.92; margin-bottom: 1rem; position: relative; }
+.cta-wrap p { font-family: var(--condensed); font-size: 16px; color: rgba(0,0,0,0.6); letter-spacing: 0.06em; margin-bottom: 2rem; position: relative; }
+.btn-dark {
+  padding: 16px 40px; background: #000; color: var(--gold);
+  font-family: var(--condensed); font-size: 15px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; position: relative;
+}
+.btn-dark:hover { background: var(--bg); transform: translateY(-2px); }
+
+/* FOOTER */
+footer { background: var(--bg); border-top: 1px solid var(--border); padding: 3rem 2rem; }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; flex-wrap: wrap; }
+.footer-logo { font-family: var(--display); font-size: 28px; letter-spacing: 4px; color: var(--gold); margin-bottom: 4px; }
+.footer-logo span { color: var(--white); }
+.footer-tag { font-family: var(--condensed); font-size: 12px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.footer-links a { font-family: var(--condensed); font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+.footer-links a:hover { color: var(--gold); }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--border); font-family: var(--condensed); font-size: 12px; color: var(--muted); letter-spacing: 0.08em; }
+
+/* ANIMS */
+.fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">TAM<span>BUILDS</span></div>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li style="position:relative;" onmouseenter="this.querySelector('.agency-dd').style.display='block'" onmouseleave="this.querySelector('.agency-dd').style.display='none'">
+      <a href="#" style="display:flex;align-items:center;gap:4px;">Tools <span style="font-size:10px;opacity:0.6;">▾</span></a>
+      <div class="agency-dd" style="display:none;position:absolute;top:calc(100% + 12px);left:50%;transform:translateX(-50%);background:rgba(6,6,8,0.98);border:1px solid rgba(245,200,66,0.22);min-width:210px;backdrop-filter:blur(20px);z-index:999;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));">
+        <a href="proposal.html" style="display:flex;align-items:center;gap:10px;padding:11px 16px;font-family:var(--condensed);font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6b6b82;text-decoration:none;border-bottom:1px solid rgba(245,200,66,0.1);transition:all 0.15s;" onmouseover="this.style.color='#f5c842';this.style.paddingLeft='20px'" onmouseout="this.style.color='#6b6b82';this.style.paddingLeft='16px'"><span style="width:6px;height:6px;border-radius:50%;background:#f5c842;flex-shrink:0;"></span>Proposal Builder</a>
+        <a href="inventory.html" style="display:flex;align-items:center;gap:10px;padding:11px 16px;font-family:var(--condensed);font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6b6b82;text-decoration:none;border-bottom:1px solid rgba(245,200,66,0.1);transition:all 0.15s;" onmouseover="this.style.color='#f5c842';this.style.paddingLeft='20px'" onmouseout="this.style.color='#6b6b82';this.style.paddingLeft='16px'"><span style="width:6px;height:6px;border-radius:50%;background:#f5c842;flex-shrink:0;"></span>Inventory Store</a>
+        <a href="pricing-sheet.html" style="display:flex;align-items:center;gap:10px;padding:11px 16px;font-family:var(--condensed);font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6b6b82;text-decoration:none;transition:all 0.15s;" onmouseover="this.style.color='#f5c842';this.style.paddingLeft='20px'" onmouseout="this.style.color='#6b6b82';this.style.paddingLeft='16px'"><span style="width:6px;height:6px;border-radius:50%;background:#f5c842;flex-shrink:0;"></span>Pricing Sheet</a>
+      </div>
+    </li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get a Quote</a>
+</nav>
+
+<!-- MOBILE TOOLS BAR (visible on small screens only) -->
+<div class="mobile-tool-bar">
+  <a href="proposal.html">📄 Proposal</a>
+  <a href="inventory.html">📦 Inventory</a>
+  <a href="pricing-sheet.html">💰 Pricing</a>
+  <a href="#contact" style="background:rgba(245,200,66,0.1);color:var(--gold);border-color:rgba(245,200,66,0.4);">Get a Quote</a>
+</div>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Web Design · Built for the Streets</div>
+    <h1 class="hero-title">
+      <span class="outline">WE BUILD</span><br>
+      <span class="solid">WEBSITES</span><br>
+      <span class="outline">THAT HIT.</span>
+    </h1>
+    <p class="hero-sub">Professional websites, inventory systems, and online stores for small businesses that are ready to get money. No templates. No fluff. Real results.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-gold">🔥 Start Your Project</a>
+      <a href="#work" class="btn-ghost">See Our Work ↓</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Live Clients</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Industries</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Custom Built</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item">Barbershops <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Cannabis Shops <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Restaurants <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Boutiques <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Artists <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Inventory Systems <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Online Stores <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Booking Sites <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Brand Sites <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Trainers <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Gyms <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Food Trucks <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Barbershops <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Cannabis Shops <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Restaurants <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Boutiques <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Artists <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Inventory Systems <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Online Stores <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Booking Sites <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Brand Sites <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Trainers <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Gyms <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Food Trucks <span class="ticker-dot"></span></span>
+  </div>
+</div>
+
+<!-- WORK -->
+<section id="work" class="work-wrap">
+  <div class="container">
+    <div class="fade-up">
+      <div class="s-eyebrow">Portfolio</div>
+      <h2 class="s-title">OUR WORK<br>SPEAKS.</h2>
+      <p style="font-size:15px;color:rgba(242,241,247,0.55);max-width:460px;line-height:1.65;margin-top:0.75rem;">Every site custom designed. Every client treated like family. Here's what we've built.</p>
+    </div>
+    <div class="work-grid">
+      <div class="work-card fade-up">
+        <div class="work-num">01</div>
+        <div class="work-industry">Cannabis Retail</div>
+        <div class="work-name">HIGHLY ELEVATED</div>
+        <div class="work-desc">Full brand site with age gate, product menu, events calendar, loyalty passport program, and live Instagram feed. Akwesasne's premier cannabis company.</div>
+        <div class="work-tags">
+          <span class="work-tag">Age Gate</span>
+          <span class="work-tag">Product Menu</span>
+          <span class="work-tag">Events</span>
+          <span class="work-tag">Loyalty Program</span>
+        </div>
+      </div>
+      <div class="work-card fade-up" style="transition-delay:0.1s">
+        <div class="work-num">02</div>
+        <div class="work-industry">Barbershop</div>
+        <div class="work-name">NIKO THA BARBER</div>
+        <div class="work-desc">Premium booking site with service menu, gallery, reviews, and direct integration to The Cut app. Clean. Sharp. Just like the cuts.</div>
+        <div class="work-tags">
+          <span class="work-tag">Booking</span>
+          <span class="work-tag">Gallery</span>
+          <span class="work-tag">Reviews</span>
+          <span class="work-tag">App Integration</span>
+        </div>
+      </div>
+      <div class="work-card fade-up" style="transition-delay:0.15s">
+        <div class="work-num">03</div>
+        <div class="work-industry">Crypto / Streaming Brand</div>
+        <div class="work-name">TAM2REAL</div>
+        <div class="work-desc">Multi-page brand hub with live BTC ticker, trading content, Pack of the Day section, and Trader University integration. Built for a content creator empire.</div>
+        <div class="work-tags">
+          <span class="work-tag">Live Data</span>
+          <span class="work-tag">Multi-page</span>
+          <span class="work-tag">Content Hub</span>
+          <span class="work-tag">Brand System</span>
+        </div>
+      </div>
+      <div class="work-card fade-up" style="transition-delay:0.2s">
+        <div class="work-num">04</div>
+        <div class="work-industry">Finance Education</div>
+        <div class="work-name">TRADER UNIVERSITY</div>
+        <div class="work-desc">Interactive education platform with a financial literacy quiz gate, trading concept library, and redirect flow to full course portal.</div>
+        <div class="work-tags">
+          <span class="work-tag">Interactive Quiz</span>
+          <span class="work-tag">Education</span>
+          <span class="work-tag">Finance</span>
+          <span class="work-tag">Custom Gate</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="fade-up">
+      <div class="s-eyebrow">Pricing</div>
+      <h2 class="s-title">WHAT WE<br>OFFER.</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-up">
+        <div class="service-icon">⚡</div>
+        <div class="service-name">LAUNCH PACK</div>
+        <div class="service-price">$300 – $500 + $30/mo</div>
+        <div class="service-desc">Get online fast. Perfect for solo operators who need a clean, professional presence without the wait.</div>
+        <ul class="service-includes">
+          <li>Single page site</li>
+          <li>Mobile responsive</li>
+          <li>Contact / booking link</li>
+          <li>Google Maps embed</li>
+          <li>Social links & Instagram</li>
+          <li>Basic SEO setup</li>
+          <li>Delivered in 5–7 days</li>
+        </ul>
+      </div>
+      <div class="service-card fade-up" style="transition-delay:0.1s">
+        <div class="service-badge">Most Popular</div>
+        <div class="service-icon">🔥</div>
+        <div class="service-name">FULL SITE</div>
+        <div class="service-price">$800 – $1,500 + $60/mo</div>
+        <div class="service-desc">The complete package. Multi-page, fully custom, built to convert visitors into customers.</div>
+        <ul class="service-includes">
+          <li>Multi-page custom site</li>
+          <li>Service / product pages</li>
+          <li>Gallery or portfolio</li>
+          <li>Reviews / testimonials</li>
+          <li>Booking or order link</li>
+          <li>Instagram feed embed</li>
+          <li>Age gate if needed</li>
+          <li>Monthly updates included</li>
+        </ul>
+      </div>
+      <div class="service-card fade-up" style="transition-delay:0.2s">
+        <div class="service-icon">💰</div>
+        <div class="service-name">STORE + INVENTORY</div>
+        <div class="service-price">$2,000 – $4,000 + $100–150/mo</div>
+        <div class="service-desc">Full e-commerce and inventory management. Sell online, track stock, and run your business from anywhere.</div>
+        <ul class="service-includes">
+          <li>Live inventory system</li>
+          <li>Online checkout / sales</li>
+          <li>Product catalog pages</li>
+          <li>Customer accounts</li>
+          <li>Admin dashboard</li>
+          <li>Analytics & reporting</li>
+          <li>Priority support</li>
+          <li>Custom domain & hosting</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section style="background:var(--surface); padding:6rem 2rem;">
+  <div class="container">
+    <div class="why-grid">
+      <div class="fade-up">
+        <div class="s-eyebrow">Why TamBuilds</div>
+        <h2 class="s-title">NOT YOUR<br>AVERAGE<br>WEB GUY.</h2>
+        <div class="why-points">
+          <div class="why-point">
+            <div class="why-icon">🤝</div>
+            <div>
+              <div class="why-point-title">We come from the same community</div>
+              <div class="why-point-desc">Based in Akwesasne. We understand local business. We're not some agency out of NYC that doesn't know your people.</div>
+            </div>
+          </div>
+          <div class="why-point">
+            <div class="why-icon">🎯</div>
+            <div>
+              <div class="why-point-title">100% custom — no templates</div>
+              <div class="why-point-desc">Every site is built from scratch for your brand. You'll never look like a copycat.</div>
+            </div>
+          </div>
+          <div class="why-point">
+            <div class="why-icon">⚡</div>
+            <div>
+              <div class="why-point-title">Fast turnaround, real support</div>
+              <div class="why-point-desc">Most sites live in under 2 weeks. And we stay around — not gone after we collect the check.</div>
+            </div>
+          </div>
+          <div class="why-point">
+            <div class="why-icon">📈</div>
+            <div>
+              <div class="why-point-title">Built to make you money</div>
+              <div class="why-point-desc">Every design decision is made to turn visitors into customers. We don't build art projects.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="why-card fade-up" style="transition-delay:0.15s">
+        <div class="why-card-title">THE NETWORK</div>
+        <div class="why-card-sub">Businesses we work with</div>
+        <div class="why-card-list">
+          <div class="why-card-item">✂️ Highly Elevated Cannabis Co.</div>
+          <div class="why-card-item">🌿 Niko Tha Barber</div>
+          <div class="why-card-item">📈 Tam2Real / Trader University</div>
+          <div class="why-card-item">🔒 Your business — next in line</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="container">
+    <div class="fade-up">
+      <div class="s-eyebrow">How It Works</div>
+      <h2 class="s-title">SIMPLE<br>PROCESS.</h2>
+    </div>
+    <div class="process-steps">
+      <div class="process-step fade-up">
+        <div class="step-num">01</div>
+        <div class="step-title">You Reach Out</div>
+        <div class="step-desc">Call, text, or DM. We talk about what you need, who your customers are, and what you're trying to accomplish.</div>
+      </div>
+      <div class="process-step fade-up" style="transition-delay:0.1s">
+        <div class="step-num">02</div>
+        <div class="step-title">We Send a Quote</div>
+        <div class="step-desc">No surprise fees. Clear pricing, timeline, and exactly what's included. You know what you're getting before you pay anything.</div>
+      </div>
+      <div class="process-step fade-up" style="transition-delay:0.15s">
+        <div class="step-num">03</div>
+        <div class="step-title">We Build It</div>
+        <div class="step-desc">We design and build your site. You get to review it and request changes before it ever goes live.</div>
+      </div>
+      <div class="process-step fade-up" style="transition-delay:0.2s">
+        <div class="step-num">04</div>
+        <div class="step-title">You Go Live</div>
+        <div class="step-desc">Site launches on your domain. We handle everything technical. You just start sending customers to it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NICHES -->
+<section style="background:var(--surface); padding:6rem 2rem;">
+  <div class="container">
+    <div class="fade-up">
+      <div class="s-eyebrow">Industries</div>
+      <h2 class="s-title">WE BUILD<br>FOR WHO?</h2>
+    </div>
+    <div class="niches-grid">
+      <div class="niche-card fade-up"><div class="niche-emoji">✂️</div><div class="niche-name">Barbers & Salons</div><div class="niche-note">Booking sites, galleries, service menus</div></div>
+      <div class="niche-card fade-up" style="transition-delay:0.05s"><div class="niche-emoji">🌿</div><div class="niche-name">Cannabis & Smoke Shops</div><div class="niche-note">Age gates, product menus, compliance pages</div></div>
+      <div class="niche-card fade-up" style="transition-delay:0.1s"><div class="niche-emoji">🍔</div><div class="niche-name">Food Trucks & Restaurants</div><div class="niche-note">Menus, hours, locations, online ordering</div></div>
+      <div class="niche-card fade-up" style="transition-delay:0.15s"><div class="niche-emoji">👟</div><div class="niche-name">Boutiques & Retail Stores</div><div class="niche-note">Product pages, inventory, online sales</div></div>
+      <div class="niche-card fade-up" style="transition-delay:0.2s"><div class="niche-emoji">💪</div><div class="niche-name">Trainers & Gyms</div><div class="niche-note">Class schedules, booking, pricing tiers</div></div>
+      <div class="niche-card fade-up" style="transition-delay:0.25s"><div class="niche-emoji">🎵</div><div class="niche-name">Artists & Musicians</div><div class="niche-note">Press kits, streaming links, merch stores</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" style="padding:0;">
+  <div class="cta-wrap">
+    <h2>READY TO<br>GET BUILT?</h2>
+    <p>Text or DM us. We'll get back to you same day. Let's talk about your vision.</p>
+    <a href="tel:+15182908767" class="btn-dark">📱 Text Us Now</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">TAM<span>BUILDS</span></div>
+      <div class="footer-tag">Web Design · Akwesasne, NY · Built for Real Business</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#work">Our Work</a></li>
+      <li><a href="#services">Services & Pricing</a></li>
+      <li><a href="#process">How It Works</a></li>
+      <li><a href="#contact">Get a Quote</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">© 2026 TamBuilds · All rights reserved · Built different.</div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+const t = document.getElementById('ticker');
+t.innerHTML += t.innerHTML;
+</script>
+
+<!-- TAM2REAL ECOSYSTEM BAR -->
+<div id="ecosystem-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(5,5,8,0.97);border-top:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:48px;font-family:'Barlow Condensed',sans-serif;">
+  <a href="../index.html" style="font-size:14px;font-weight:900;letter-spacing:3px;color:#e63946;text-decoration:none;flex-shrink:0;">TAM<span style="color:#f0eff4;">2</span>REAL</a>
+  <div style="display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;justify-content:center;padding:0 1rem;">
+    <a href="../index.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#f0eff4'" onmouseout="this.style.color='#6b6b80'">🏠 Home</a>
+    <a href="../trader-university.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#ffd166'" onmouseout="this.style.color='#6b6b80'">🎓 Trader U</a>
+    <a href="../pack.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#22c55e'" onmouseout="this.style.color='#6b6b80'">🍃 Pack</a>
+    <a href="../highly_elevated.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#22c55e'" onmouseout="this.style.color='#6b6b80'">🌿 Highly Elevated</a>
+    <a href="../niko_tha_barber.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#2de4d4'" onmouseout="this.style.color='#6b6b80'">✂️ Niko</a>
+    <a href="agency.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#f5c842;text-decoration:none;white-space:nowrap;">🔨 TamBuilds ←</a>
+    <span style="width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 4px;flex-shrink:0;"></span>
+    <a href="proposal.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='#6b6b80'">📄 Proposal</a>
+    <a href="inventory.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='#6b6b80'">📦 Inventory</a>
+    <a href="pricing-sheet.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='#6b6b80'">💰 Pricing</a>
+  </div>
+  <button onclick="document.getElementById('ecosystem-bar').style.display='none'" style="background:none;border:none;color:#6b6b80;cursor:pointer;font-size:16px;padding:4px 8px;flex-shrink:0;">✕</button>
+</div>
+<div style="height:48px;"></div>
+<!-- END ECOSYSTEM BAR -->
+</body>
+</html>

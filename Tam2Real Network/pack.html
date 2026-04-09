@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pack of the Day — Tam2Real</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050508;
+  --surface: #0d0d14;
+  --surface2: #13131e;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --red: #e63946;
+  --red2: #ff6b6b;
+  --gold: #ffd166;
+  --green: #16a34a;
+  --green2: #22c55e;
+  --white: #f0eff4;
+  --muted: #6b6b80;
+  --display: 'Bebas Neue', sans-serif;
+  --body: 'Barlow', sans-serif;
+  --condensed: 'Barlow Condensed', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--white); font-family: var(--body); overflow-x: hidden; min-height: 100vh; }
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 1000; opacity: 0.5;
+}
+
+/* ── AGE GATE ── */
+#age-gate {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; text-align: center; padding: 2rem;
+}
+#age-gate.gone { display: none; }
+#main-content { display: none; }
+#main-content.visible { display: block; }
+
+.gate-logo { font-family: var(--display); font-size: 42px; letter-spacing: 4px; margin-bottom: 0.25rem; }
+.gate-logo span { color: var(--red); }
+.gate-leaf { font-size: 72px; margin: 1rem 0; filter: drop-shadow(0 0 24px rgba(34,197,94,0.5)); animation: sway 3s ease-in-out infinite; }
+@keyframes sway { 0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)} }
+.gate-title { font-family: var(--display); font-size: clamp(36px,8vw,64px); letter-spacing: 2px; line-height: 1; margin-bottom: 0.75rem; }
+.gate-sub { font-family: var(--condensed); font-size: 15px; color: rgba(240,239,244,0.55); max-width: 380px; line-height: 1.7; margin-bottom: 2.5rem; letter-spacing: 0.05em; }
+.gate-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.gate-yes {
+  padding: 15px 44px; background: var(--green); color: white;
+  font-family: var(--condensed); font-size: 17px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; border: none; cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  transition: all 0.2s;
+}
+.gate-yes:hover { background: #15803d; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(22,163,74,0.3); }
+.gate-no {
+  padding: 15px 44px; background: transparent; color: var(--muted);
+  font-family: var(--condensed); font-size: 17px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  border: 1px solid var(--border2); cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  transition: all 0.2s;
+}
+.gate-no:hover { color: var(--red); border-color: var(--red); }
+.gate-disclaimer { font-family: var(--condensed); font-size: 11px; color: var(--muted); max-width: 340px; line-height: 1.6; margin-top: 2rem; letter-spacing: 0.04em; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 1.5rem; height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(5,5,8,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: var(--display); font-size: 22px; letter-spacing: 2px; text-decoration: none; color: var(--white); }
+.nav-logo span { color: var(--red); }
+.nav-back {
+  font-family: var(--condensed); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  text-decoration: none; display: flex; align-items: center; gap: 6px;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--white); }
+.nav-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--condensed); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.1em; color: var(--green2);
+  border: 1px solid rgba(34,197,94,0.3); padding: 4px 12px;
+}
+.nav-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green2); animation: blink 1.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+/* ── LAYOUT ── */
+.page { max-width: 900px; margin: 0 auto; padding: 80px 1.5rem 4rem; }
+
+/* ── HERO ── */
+.pack-hero { margin-bottom: 2.5rem; }
+.pack-eyebrow {
+  font-family: var(--condensed); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--green);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;
+}
+.pack-eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--green); }
+.pack-hero-title { font-family: var(--display); font-size: clamp(52px, 10vw, 88px); letter-spacing: 2px; line-height: 0.92; }
+.pack-hero-title span { color: var(--green2); }
+.pack-hero-sub { font-family: var(--condensed); font-size: 15px; color: var(--muted); letter-spacing: 0.06em; margin-top: 0.75rem; }
+
+/* ── STRAIN WHEEL ── */
+.wheel-section { margin-bottom: 2.5rem; }
+.wheel-section-label {
+  font-family: var(--condensed); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--green);
+  margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;
+}
+.wheel-section-label::before { content: ''; width: 20px; height: 2px; background: var(--green); }
+.wheel-wrap {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-top: 3px solid var(--green); overflow: hidden;
+}
+.wheel-embed-inner { position: relative; width: 100%; padding-top: 62%; }
+.wheel-embed-inner iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.wheel-footer {
+  padding: 1rem 1.5rem; display: flex; align-items: center;
+  justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+}
+.wheel-footer-note { font-family: var(--condensed); font-size: 13px; color: var(--muted); letter-spacing: 0.06em; }
+.wheel-open-link {
+  font-family: var(--condensed); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--green2);
+  text-decoration: none; display: flex; align-items: center; gap: 4px; transition: opacity 0.2s;
+}
+.wheel-open-link:hover { opacity: 0.7; }
+
+/* ── TODAY'S CARD ── */
+.pack-card {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-top: 3px solid var(--green); margin-bottom: 1.5rem; overflow: hidden;
+}
+.pack-card-top {
+  padding: 1.75rem 1.75rem 1.5rem;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap; border-bottom: 1px solid var(--border);
+}
+.pack-label { font-family: var(--condensed); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: var(--green); text-transform: uppercase; margin-bottom: 4px; }
+.pack-name { font-family: var(--display); font-size: clamp(28px, 6vw, 42px); letter-spacing: 1px; line-height: 1; }
+.pack-source { font-family: var(--condensed); font-size: 13px; color: var(--muted); margin-top: 4px; letter-spacing: 0.06em; }
+
+.verdict-box {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 12px 22px;
+  font-family: var(--display); font-size: 26px; letter-spacing: 1px;
+  border: 1px solid; min-width: 90px; text-align: center;
+}
+.verdict-box.w { color: var(--green2); border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.06); }
+.verdict-box.l { color: var(--red); border-color: rgba(230,57,70,0.4); background: rgba(230,57,70,0.06); }
+.verdict-box.tbd { color: var(--muted); border-color: var(--border2); background: transparent; }
+.verdict-label { font-size: 10px; font-family: var(--condensed); letter-spacing: 0.12em; opacity: 0.7; margin-top: 3px; text-transform: uppercase; }
+
+/* ratings grid */
+.ratings-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
+.rating-cell { background: var(--surface2); padding: 1.25rem 1rem; text-align: center; }
+.rating-emoji { font-size: 20px; margin-bottom: 4px; }
+.rating-cat { font-family: var(--condensed); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.rating-score { font-family: var(--display); font-size: 36px; letter-spacing: 1px; line-height: 1; }
+.rating-score.high { color: var(--green2); }
+.rating-score.mid { color: var(--gold); }
+.rating-score.low { color: var(--red); }
+.rating-score.tbd { color: var(--muted); }
+.rating-bar-wrap { height: 3px; background: rgba(255,255,255,0.06); margin-top: 8px; border-radius: 2px; overflow: hidden; }
+.rating-bar { height: 100%; border-radius: 2px; transition: width 1.2s ease; }
+.rating-bar.high { background: var(--green2); }
+.rating-bar.mid { background: var(--gold); }
+.rating-bar.low { background: var(--red); }
+
+/* pack bottom */
+.pack-bottom {
+  padding: 1.25rem 1.75rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+}
+.lighter-wrap { display: flex; align-items: center; gap: 12px; }
+.lighter-icon { font-size: 32px; }
+.lighter-label { font-family: var(--condensed); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+.lighter-name { font-family: var(--condensed); font-size: 16px; font-weight: 700; letter-spacing: 0.05em; color: var(--white); margin-top: 2px; }
+.wheel-note { font-family: var(--condensed); font-size: 12px; color: var(--green); letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px; }
+
+/* ── HISTORY ── */
+.history-label {
+  font-family: var(--condensed); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;
+}
+.history-label::before { content: ''; width: 20px; height: 2px; background: var(--muted); }
+.history-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+.h-chip {
+  flex-shrink: 0; background: var(--surface); border: 1px solid var(--border2);
+  padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+  font-family: var(--condensed); font-size: 13px; letter-spacing: 0.06em;
+}
+.h-chip-name { color: var(--white); }
+.h-chip-verdict { font-weight: 700; font-size: 15px; }
+.h-chip-verdict.w { color: var(--green2); }
+.h-chip-verdict.l { color: var(--red); }
+.h-chip-score { font-size: 11px; color: var(--muted); }
+
+/* ── LIGHTER COLLECTION ── */
+.collection-section { margin-top: 3rem; }
+.collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1px; background: var(--border); margin-top: 1rem; }
+.lighter-card { background: var(--surface); padding: 1.5rem 1rem; text-align: center; transition: background 0.2s; }
+.lighter-card:hover { background: var(--surface2); }
+.lighter-card-icon { font-size: 36px; margin-bottom: 8px; }
+.lighter-card-num { font-family: var(--condensed); font-size: 10px; color: var(--green); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 2px; }
+.lighter-card-name { font-family: var(--condensed); font-size: 14px; font-weight: 700; }
+.lighter-card-note { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.lighter-card.locked { opacity: 0.35; }
+.lighter-card.locked .lighter-card-icon { filter: grayscale(1); }
+
+/* mobile */
+@media (max-width: 600px) {
+  .ratings-grid { grid-template-columns: repeat(2, 1fr); }
+  .pack-card-top { flex-direction: column; }
+  .verdict-box { align-self: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── 21+ AGE GATE ── -->
+<div id="age-gate">
+  <div class="gate-logo">TAM<span>2</span>REAL</div>
+  <div class="gate-leaf">🍃</div>
+  <div class="gate-title">HOLD UP.<br>YOU 21+?</div>
+  <p class="gate-sub">Pack of the Day is 21+ content only. Cannabis consumption where you are must be legal. Only enter if you qualify.</p>
+  <div class="gate-btns">
+    <button class="gate-yes" onclick="enterPage()">Yeah, I'm 21+ 🔥</button>
+    <button class="gate-no" onclick="denyPage()">Nah, I'm Under</button>
+  </div>
+  <p class="gate-disclaimer">By entering you confirm you are 21 or older and that cannabis is legal where you are. Tam2Real does not encourage illegal activity. 21+ only.</p>
+</div>
+
+<!-- ── MAIN CONTENT ── -->
+<div id="main-content">
+
+<nav>
+  <a href="index.html" class="nav-back">← Back to Site</a>
+  <a href="index.html" class="nav-logo">TAM<span>2</span>REAL</a>
+  <div class="nav-badge"><div class="nav-badge-dot"></div>21+ ONLY</div>
+</nav>
+
+<div class="page">
+
+  <!-- Hero -->
+  <div class="pack-hero">
+    <div class="pack-eyebrow">21+ · Updated Every Stream</div>
+    <h1 class="pack-hero-title">PACK OF<br>THE <span>DAY</span></h1>
+    <p class="pack-hero-sub">🎡 Wheel picks the strain · Open it · Smell it · W or L? · Roll it · Light it up · Rate it 1–10</p>
+  </div>
+
+  <!-- Strain Wheel -->
+  <div class="wheel-section">
+    <div class="wheel-section-label">Strain Wheel — Spin to Decide</div>
+    <div class="wheel-wrap">
+      <div class="wheel-embed-inner">
+        <iframe src="https://wheelofnames.com/ncy-gd7" title="Pack of the Day Strain Wheel" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="wheel-footer">
+        <span class="wheel-footer-note">🍃 Wheel updated each stream with new strains</span>
+        <a href="https://wheelofnames.com/ncy-gd7" class="wheel-open-link" target="_blank">Full Screen ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Today's Pack Card -->
+  <div class="pack-card">
+    <div class="pack-card-top">
+      <div>
+        <div class="pack-label">Today's Pack 🍃</div>
+        <div class="pack-name" id="pack-name">TBD on Stream</div>
+        <div class="pack-source" id="pack-source">Wheel decides tonight @ 4:45 PM</div>
+      </div>
+      <div class="verdict-box tbd" id="verdict-box">
+        <span id="verdict-text">?</span>
+        <span class="verdict-label">Smell</span>
+      </div>
+    </div>
+
+    <div class="ratings-grid">
+      <div class="rating-cell">
+        <div class="rating-emoji">👃</div>
+        <div class="rating-cat">Smell</div>
+        <div class="rating-score tbd" id="score-smell">—</div>
+        <div class="rating-bar-wrap"><div class="rating-bar" id="bar-smell" style="width:0%"></div></div>
+      </div>
+      <div class="rating-cell">
+        <div class="rating-emoji">👀</div>
+        <div class="rating-cat">Look</div>
+        <div class="rating-score tbd" id="score-look">—</div>
+        <div class="rating-bar-wrap"><div class="rating-bar" id="bar-look" style="width:0%"></div></div>
+      </div>
+      <div class="rating-cell">
+        <div class="rating-emoji">🔥</div>
+        <div class="rating-cat">Burn</div>
+        <div class="rating-score tbd" id="score-burn">—</div>
+        <div class="rating-bar-wrap"><div class="rating-bar" id="bar-burn" style="width:0%"></div></div>
+      </div>
+      <div class="rating-cell">
+        <div class="rating-emoji">✨</div>
+        <div class="rating-cat">Vibe</div>
+        <div class="rating-score tbd" id="score-vibe">—</div>
+        <div class="rating-bar-wrap"><div class="rating-bar" id="bar-vibe" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="pack-bottom">
+      <div class="lighter-wrap">
+        <div class="lighter-icon">🔫</div>
+        <div>
+          <div class="lighter-label">Lighter of the Day</div>
+          <div class="lighter-name" id="lighter-name">Gun Lighter — Collection #2</div>
+        </div>
+      </div>
+      <div class="wheel-note">🎡 Wheel picks the strain · Updated each stream</div>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div style="margin-bottom:3rem;">
+    <div class="history-label">Recent Packs</div>
+    <div class="history-row">
+      <div class="h-chip"><span class="h-chip-name">Runtz</span><span class="h-chip-verdict w">W</span><span class="h-chip-score">8.5/10</span></div>
+      <div class="h-chip"><span class="h-chip-name">Gelato</span><span class="h-chip-verdict w">W</span><span class="h-chip-score">9/10</span></div>
+      <div class="h-chip"><span class="h-chip-name">Reggie</span><span class="h-chip-verdict l">L</span><span class="h-chip-score">3/10</span></div>
+      <div class="h-chip"><span class="h-chip-name">OG Kush</span><span class="h-chip-verdict w">W</span><span class="h-chip-score">8/10</span></div>
+      <div class="h-chip"><span class="h-chip-name">Zaza</span><span class="h-chip-verdict w">W</span><span class="h-chip-score">9.5/10</span></div>
+      <div class="h-chip"><span class="h-chip-name">Mids</span><span class="h-chip-verdict l">L</span><span class="h-chip-score">4/10</span></div>
+    </div>
+  </div>
+
+  <!-- Lighter Collection -->
+  <div class="collection-section">
+    <div class="history-label" style="color:var(--gold);">🔥 Lighter Collection</div>
+    <div class="collection-grid">
+      <div class="lighter-card">
+        <div class="lighter-card-icon">🔫</div>
+        <div class="lighter-card-num">Collection #1</div>
+        <div class="lighter-card-name">The OG</div>
+        <div class="lighter-card-note">First one ever</div>
+      </div>
+      <div class="lighter-card">
+        <div class="lighter-card-icon">🔫</div>
+        <div class="lighter-card-num">Collection #2</div>
+        <div class="lighter-card-name">Gun Lighter</div>
+        <div class="lighter-card-note">Current daily driver</div>
+      </div>
+      <div class="lighter-card locked">
+        <div class="lighter-card-icon">🔒</div>
+        <div class="lighter-card-num">Collection #3</div>
+        <div class="lighter-card-name">Coming Soon</div>
+        <div class="lighter-card-note">Stay tuned</div>
+      </div>
+      <div class="lighter-card locked">
+        <div class="lighter-card-icon">🔒</div>
+        <div class="lighter-card-num">Collection #4</div>
+        <div class="lighter-card-name">Coming Soon</div>
+        <div class="lighter-card-note">Stay tuned</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</div><!-- /main-content -->
+
+<script>
+function enterPage() {
+  sessionStorage.setItem('age21', '1');
+  document.getElementById('age-gate').classList.add('gone');
+  document.getElementById('main-content').classList.add('visible');
+  setTimeout(animateBars, 300);
+}
+
+function denyPage() {
+  document.getElementById('age-gate').innerHTML = `
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;margin-bottom:0.5rem;">TAM<span style="color:#e63946">2</span>REAL</div>
+    <div style="font-size:64px;margin:1rem 0;">🚫</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,48px);letter-spacing:2px;margin-bottom:0.75rem;line-height:1;">COME BACK<br>WHEN YOU'RE OLDER</div>
+    <p style="font-family:'Barlow Condensed',sans-serif;font-size:14px;color:#6b6b80;letter-spacing:0.06em;margin-bottom:2rem;">Stream is live on Twitch & YouTube daily @ 4:45 PM — all ages welcome there!</p>
+    <a href="index.html" style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ffd166;text-decoration:none;border:1px solid rgba(255,209,102,0.4);padding:12px 28px;">← Back to Main Site</a>
+  `;
+}
+
+// Check session
+if (sessionStorage.getItem('age21')) {
+  document.getElementById('age-gate').classList.add('gone');
+  document.getElementById('main-content').classList.add('visible');
+  setTimeout(animateBars, 300);
+}
+
+// Rating bar animation
+const ratings = {
+  smell: { score: null, el: 'score-smell', bar: 'bar-smell' },
+  look:  { score: null, el: 'score-look',  bar: 'bar-look'  },
+  burn:  { score: null, el: 'score-burn',  bar: 'bar-burn'  },
+  vibe:  { score: null, el: 'score-vibe',  bar: 'bar-vibe'  },
+};
+
+function getClass(n) {
+  if (n === null) return 'tbd';
+  if (n >= 7) return 'high';
+  if (n >= 5) return 'mid';
+  return 'low';
+}
+
+function animateBars() {
+  Object.values(ratings).forEach(r => {
+    const scoreEl = document.getElementById(r.el);
+    const barEl = document.getElementById(r.bar);
+    const cls = getClass(r.score);
+    scoreEl.className = 'rating-score ' + cls;
+    scoreEl.textContent = r.score !== null ? r.score : '—';
+    barEl.className = 'rating-bar ' + cls;
+    barEl.style.width = r.score !== null ? (r.score * 10) + '%' : '0%';
+  });
+}
+</script>
+
+<!-- TAM2REAL ECOSYSTEM BAR -->
+<div id="ecosystem-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(5,5,8,0.97);border-top:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:48px;font-family:'Barlow Condensed',sans-serif;">
+  <a href="index.html" style="font-size:14px;font-weight:900;letter-spacing:3px;color:#e63946;text-decoration:none;flex-shrink:0;">TAM<span style="color:#f0eff4;">2</span>REAL</a>
+  <div style="display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1;justify-content:center;padding:0 1rem;">
+    <a href="index.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;transition:color 0.2s;" onmouseover="this.style.color='#f0eff4'" onmouseout="this.style.color='#6b6b80'">🏠 Home</a>
+    <a href="trader-university.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#ffd166'" onmouseout="this.style.color='#6b6b80'">🎓 Trader U</a>
+    <a href="pack.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#22c55e'" onmouseout="this.style.color='#6b6b80'">🍃 Pack</a>
+    <a href="highly_elevated.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#22c55e'" onmouseout="this.style.color='#6b6b80'">🌿 Highly Elevated</a>
+    <a href="niko_tha_barber.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#2de4d4'" onmouseout="this.style.color='#6b6b80'">✂️ Niko</a>
+    <a href="agency/agency.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='#6b6b80'">🔨 TamBuilds</a>
+  </div>
+  <button onclick="document.getElementById('ecosystem-bar').style.display='none'" style="background:none;border:none;color:#6b6b80;cursor:pointer;font-size:16px;padding:4px 8px;flex-shrink:0;">✕</button>
+</div>
+<div style="height:48px;"></div>
+<!-- END ECOSYSTEM BAR -->
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TamBuilds — Services & Pricing</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#060608;--surface:#0e0e15;--surface2:#16161f;
+  --gold:#f5c842;--gold2:#e8b800;--red:#e63946;--green:#22c55e;
+  --white:#f2f1f7;--muted:#6b6b82;
+  --border:rgba(245,200,66,0.1);--border2:rgba(245,200,66,0.22);
+  --display:'Bebas Neue',sans-serif;--body:'Barlow',sans-serif;--condensed:'Barlow Condensed',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--white);font-family:var(--body);}
+.page{max-width:900px;margin:0 auto;padding:3rem 1.5rem 5rem;}
+.header{text-align:center;margin-bottom:3.5rem;padding-bottom:2rem;border-bottom:1px solid var(--border2);}
+.logo{font-family:var(--display);font-size:36px;letter-spacing:6px;color:var(--gold);margin-bottom:4px;}
+.logo span{color:var(--white);}
+.tagline{font-family:var(--condensed);font-size:13px;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;}
+.header-title{font-family:var(--display);font-size:clamp(48px,8vw,88px);letter-spacing:2px;line-height:0.9;margin:1rem 0;}
+.header-sub{font-family:var(--condensed);font-size:15px;color:rgba(242,241,247,0.55);letter-spacing:0.06em;max-width:500px;margin:0 auto;line-height:1.6;}
+
+.section-label{font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:1.25rem;}
+.section-label::before{content:'';width:18px;height:2px;background:var(--gold);}
+
+/* TIER CARDS */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);margin-bottom:3rem;}
+@media(max-width:680px){.tiers{grid-template-columns:1fr;}}
+.tier{background:var(--surface);padding:2rem 1.5rem;position:relative;}
+.tier.featured{background:var(--surface2);border-top:3px solid var(--gold);}
+.tier-badge{display:inline-block;padding:3px 10px;background:var(--gold);color:#000;font-family:var(--condensed);font-size:10px;font-weight:900;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+.tier-name{font-family:var(--display);font-size:30px;letter-spacing:1px;margin-bottom:4px;}
+.tier-price{font-family:var(--display);font-size:38px;letter-spacing:1px;color:var(--gold);line-height:1;}
+.tier-monthly{font-family:var(--condensed);font-size:12px;color:var(--muted);margin-bottom:1.25rem;letter-spacing:0.08em;}
+.tier-divider{height:1px;background:var(--border2);margin:1rem 0;}
+.tier-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.tier-list li{font-family:var(--condensed);font-size:13px;color:rgba(242,241,247,0.7);letter-spacing:0.04em;padding-left:1rem;position:relative;line-height:1.35;}
+.tier-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-size:11px;}
+.tier-list li.bold{color:var(--white);font-weight:700;}
+
+/* ADD-ONS TABLE */
+.addons-table{width:100%;border-collapse:collapse;margin-bottom:3rem;}
+.addons-table th{font-family:var(--condensed);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border2);text-align:left;}
+.addons-table td{font-family:var(--condensed);font-size:14px;padding:12px 12px;border-bottom:1px solid var(--border);vertical-align:top;letter-spacing:0.04em;}
+.addons-table tr:last-child td{border-bottom:none;}
+.addons-table tr:hover td{background:var(--surface);}
+.price-cell{color:var(--gold);font-weight:700;white-space:nowrap;text-align:right;}
+.desc-cell{color:var(--muted);font-size:13px;}
+
+/* WHAT'S INCLUDED */
+.included-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:3rem;}
+@media(max-width:580px){.included-grid{grid-template-columns:1fr;}}
+.included-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);}
+.incl-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.incl-title{font-family:var(--condensed);font-size:14px;font-weight:700;letter-spacing:0.05em;margin-bottom:2px;}
+.incl-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* TERMS */
+.terms-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:3rem;}
+@media(max-width:580px){.terms-grid{grid-template-columns:1fr;}}
+.term-card{padding:1.25rem 1.5rem;background:var(--surface);border-left:3px solid var(--gold);}
+.term-title{font-family:var(--condensed);font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.term-body{font-size:13px;color:rgba(242,241,247,0.6);line-height:1.65;}
+
+/* CTA */
+.cta-box{background:var(--gold);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.cta-box::before{content:'TAMBUILDS';position:absolute;font-family:var(--display);font-size:120px;color:rgba(0,0,0,0.07);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;letter-spacing:8px;}
+.cta-box h2{font-family:var(--display);font-size:clamp(32px,5vw,56px);color:#000;letter-spacing:2px;line-height:0.95;margin-bottom:0.75rem;position:relative;}
+.cta-box p{font-family:var(--condensed);font-size:14px;color:rgba(0,0,0,0.6);margin-bottom:1.5rem;letter-spacing:0.06em;position:relative;}
+.cta-contacts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative;}
+.cta-contact{font-family:var(--condensed);font-size:15px;font-weight:900;letter-spacing:0.08em;color:#000;text-decoration:none;display:flex;align-items:center;gap:6px;}
+
+/* FOOTER */
+.doc-footer{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.doc-footer-logo{font-family:var(--display);font-size:20px;letter-spacing:4px;color:var(--gold);}
+.doc-footer-logo span{color:var(--white);}
+.doc-footer-info{font-family:var(--condensed);font-size:12px;color:var(--muted);letter-spacing:0.08em;text-align:right;}
+.print-btn{position:fixed;bottom:2rem;right:2rem;padding:12px 22px;background:var(--gold);color:#000;border:none;cursor:pointer;font-family:var(--condensed);font-size:13px;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));box-shadow:0 4px 24px rgba(245,200,66,0.3);transition:all 0.2s;}
+.print-btn:hover{background:#fff;transform:translateY(-2px);}
+@media print {
+  .print-btn{display:none;}
+  body{background:#fff;color:#000;}
+  .tier,.term-card,.included-item{background:#f9f9f9;border-color:#ddd;}
+  .tier.featured{background:#f3f0e0;}
+  .addons-table tr:hover td{background:none;}
+  .cta-box{background:#f5c842;}
+  .logo,.tier-price,.section-label,.term-title,.cta-box h2{color:#b8860b;}
+  .cta-box p,.header-sub,.incl-desc,.term-body,.desc-cell{color:#666;}
+  .addons-table td,.tier-list li{color:#333;}
+  .price-cell{color:#b8860b;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="logo">TAM<span>BUILDS</span></div>
+    <div class="tagline">Web Design · Akwesasne, NY · Built for Real Business</div>
+    <div class="header-title">SERVICES &<br>PRICING</div>
+    <div class="header-sub">Professional web design for small businesses. No templates. No fluff. Real results, real fast.</div>
+  </div>
+
+  <div class="section-label">Service Tiers</div>
+  <div class="tiers">
+    <div class="tier">
+      <div class="tier-name">LAUNCH PACK</div>
+      <div class="tier-price">$300–500</div>
+      <div class="tier-monthly">+ $30/month hosting & support</div>
+      <div class="tier-divider"></div>
+      <ul class="tier-list">
+        <li class="bold">Single page website</li>
+        <li>Mobile responsive design</li>
+        <li>Contact / booking link</li>
+        <li>Google Maps embed</li>
+        <li>Social media links</li>
+        <li>Basic SEO setup</li>
+        <li>Custom domain setup</li>
+        <li>Delivered in 5–7 days</li>
+      </ul>
+    </div>
+    <div class="tier featured">
+      <div class="tier-badge">Most Popular</div>
+      <div class="tier-name">FULL SITE</div>
+      <div class="tier-price">$800–1,500</div>
+      <div class="tier-monthly">+ $60/month hosting, updates & support</div>
+      <div class="tier-divider"></div>
+      <ul class="tier-list">
+        <li class="bold">Multi-page custom website</li>
+        <li>Service / product pages</li>
+        <li>Gallery or portfolio section</li>
+        <li>Reviews & testimonials</li>
+        <li>Booking or order link</li>
+        <li>Instagram live feed embed</li>
+        <li>Age gate (if needed)</li>
+        <li>Monthly content updates</li>
+        <li>Delivered in 1–2 weeks</li>
+      </ul>
+    </div>
+    <div class="tier">
+      <div class="tier-name">STORE + INV</div>
+      <div class="tier-price">$2k–4k</div>
+      <div class="tier-monthly">+ $100–150/month priority retainer</div>
+      <div class="tier-divider"></div>
+      <ul class="tier-list">
+        <li class="bold">Full e-commerce website</li>
+        <li>Live inventory system</li>
+        <li>Online checkout / payment</li>
+        <li>Product catalog pages</li>
+        <li>Customer accounts</li>
+        <li>Admin dashboard</li>
+        <li>Analytics & reporting</li>
+        <li>Priority support</li>
+        <li>Delivered in 2–3 weeks</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-label">Add-On Services</div>
+  <table class="addons-table">
+    <thead>
+      <tr>
+        <th>Add-On</th>
+        <th>Description</th>
+        <th style="text-align:right;">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Age Gate / Verification Screen</td><td class="desc-cell">21+ or 18+ verification overlay with yes/no gate and session memory</td><td class="price-cell">+$200</td></tr>
+      <tr><td>Instagram Live Feed Embed</td><td class="desc-cell">Real-time Instagram post feed displayed on your website</td><td class="price-cell">+$150</td></tr>
+      <tr><td>Online Booking Integration</td><td class="desc-cell">Connect to Square, Calendly, The Cut, or custom booking flow</td><td class="price-cell">+$300</td></tr>
+      <tr><td>Interactive Quiz or Game</td><td class="desc-cell">Custom quiz gate, trivia game, or interactive experience for visitors</td><td class="price-cell">+$250</td></tr>
+      <tr><td>Events Calendar + RSVP</td><td class="desc-cell">Event listings with dates, descriptions, and RSVP / ticket link</td><td class="price-cell">+$400</td></tr>
+      <tr><td>Loyalty / Passport Program</td><td class="desc-cell">Digital stamp card or loyalty program page for returning customers</td><td class="price-cell">+$350</td></tr>
+      <tr><td>Live Data Feed (Crypto, Stocks)</td><td class="desc-cell">Real-time price tickers and market data widgets</td><td class="price-cell">+$200</td></tr>
+      <tr><td>Logo Design</td><td class="desc-cell">Custom logo designed to match your brand and site aesthetic</td><td class="price-cell">+$150–300</td></tr>
+      <tr><td>Rush Delivery</td><td class="desc-cell">Guaranteed 3-day turnaround on any tier</td><td class="price-cell">+$200</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">What's Always Included</div>
+  <div class="included-grid">
+    <div class="included-item"><div class="incl-icon">📱</div><div><div class="incl-title">Mobile Responsive</div><div class="incl-desc">Every site looks perfect on phones, tablets, and desktops.</div></div></div>
+    <div class="included-item"><div class="incl-icon">🔒</div><div><div class="incl-title">SSL Security</div><div class="incl-desc">HTTPS secured so visitors trust your site and Google ranks it.</div></div></div>
+    <div class="included-item"><div class="incl-icon">⚡</div><div><div class="incl-title">Fast Loading</div><div class="incl-desc">Optimized code means your site loads in under 2 seconds.</div></div></div>
+    <div class="included-item"><div class="incl-icon">🎨</div><div><div class="incl-title">100% Custom Design</div><div class="incl-desc">No templates. Every site is built from scratch for your brand.</div></div></div>
+    <div class="included-item"><div class="incl-icon">🔍</div><div><div class="incl-title">Basic SEO Setup</div><div class="incl-desc">Page titles, descriptions, and structure set up so Google can find you.</div></div></div>
+    <div class="included-item"><div class="incl-icon">🤝</div><div><div class="incl-title">Ongoing Support</div><div class="incl-desc">We don't disappear after launch. Monthly retainer covers updates & fixes.</div></div></div>
+  </div>
+
+  <div class="section-label">Terms & Policies</div>
+  <div class="terms-grid">
+    <div class="term-card">
+      <div class="term-title">Payment</div>
+      <div class="term-body">50% deposit required before work begins. Remaining 50% due on delivery. Monthly retainer billed on the 1st of each month. Accepted: Cash, Venmo, Zelle, CashApp.</div>
+    </div>
+    <div class="term-card">
+      <div class="term-title">Revisions</div>
+      <div class="term-body">Up to 3 rounds of revisions included in every project. Additional revisions billed at $75/hr. Major scope changes may require a new quote.</div>
+    </div>
+    <div class="term-card">
+      <div class="term-title">Content</div>
+      <div class="term-body">Client provides logos, photos, and text content. TamBuilds provides placeholder content at no charge and can source stock photos if needed.</div>
+    </div>
+    <div class="term-card">
+      <div class="term-title">Ownership</div>
+      <div class="term-body">Upon final payment, you own your website completely. TamBuilds retains the right to showcase the work in our portfolio. You can cancel hosting anytime.</div>
+    </div>
+  </div>
+
+  <div class="cta-box">
+    <h2>LET'S BUILD<br>SOMETHING.</h2>
+    <p>Ready to get started? Reach out today — we respond same day.</p>
+    <div class="cta-contacts">
+      <span class="cta-contact">📱 Text / Call: (518) 290-8767</span>
+      <span class="cta-contact">📸 DM: @tam2real</span>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div class="doc-footer-logo">TAM<span>BUILDS</span></div>
+    <div class="doc-footer-info">Web Design · Akwesasne, NY<br>tambuilds.com · © 2026</div>
+  </div>
+</div>
+
+<button class="print-btn" onclick="window.print()">🖨️ Save as PDF</button>
+
+<!-- TAM2REAL ECOSYSTEM BAR -->
+<div id="ecosystem-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(5,5,8,0.97);border-top:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:48px;font-family:'Barlow Condensed',sans-serif;">
+  <a href="../index.html" style="font-size:14px;font-weight:900;letter-spacing:3px;color:#e63946;text-decoration:none;flex-shrink:0;">TAM<span style="color:#f0eff4;">2</span>REAL</a>
+  <div style="display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1;justify-content:center;padding:0 1rem;">
+    <a href="../index.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#f0eff4'" onmouseout="this.style.color='#6b6b80'">🏠 Home</a>
+    <a href="../trader-university.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#ffd166'" onmouseout="this.style.color='#6b6b80'">🎓 Trader U</a>
+    <a href="../pack.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#22c55e'" onmouseout="this.style.color='#6b6b80'">🍃 Pack</a>
+    <a href="../highly_elevated.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#22c55e'" onmouseout="this.style.color='#6b6b80'">🌿 Highly Elevated</a>
+    <a href="../niko_tha_barber.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#2de4d4'" onmouseout="this.style.color='#6b6b80'">✂️ Niko</a>
+    <a href="agency.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#f5c842;text-decoration:none;white-space:nowrap;">🔨 TamBuilds</a>
+  </div>
+  <button onclick="document.getElementById('ecosystem-bar').style.display='none'" style="background:none;border:none;color:#6b6b80;cursor:pointer;font-size:16px;padding:4px 8px;flex-shrink:0;">✕</button>
+</div>
+<div style="height:48px;"></div>
+<!-- END ECOSYSTEM BAR -->
+</body>
+</html>
