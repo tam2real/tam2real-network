@@ -1,18 +1,23 @@
+# Tam2Real Network auto-deploy
 name: Deploy to GitHub Pages
+
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+
 permissions:
   contents: read
   pages: write
   id-token: write
 
+
 concurrency:
   group: pages
   cancel-in-progress: true
+
 
 jobs:
   deploy:
@@ -23,13 +28,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'Tam2Real Network'
+
 
       - name: Deploy to GitHub Pages
         id: deployment
