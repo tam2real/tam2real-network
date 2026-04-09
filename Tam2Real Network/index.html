@@ -145,7 +145,7 @@ nav {
 .rblx-filter { padding: 7px 16px; font-family: var(--condensed); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid var(--border2); color: var(--muted); background: transparent; cursor: pointer; transition: all 0.2s; }
 .rblx-filter:hover, .rblx-filter.active { border-color: #00c8ff; color: #00c8ff; background: rgba(0,200,255,0.06); }
 .roblox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1px; background: var(--border2); }
-.rblx-card { background: var(--surface2); padding: 1.5rem; position: relative; overflow: hidden; transition: background 0.2s; cursor: default; }
+.rblx-card { background: var(--surface2); padding: 1.5rem; position: relative; overflow: hidden; transition: background 0.2s; cursor: pointer; text-decoration: none; display: block; color: inherit; }
 .rblx-card:hover { background: #13131e; }
 .rblx-rank { font-family: var(--display); font-size: 48px; color: rgba(255,255,255,0.04); position: absolute; top: 0.25rem; right: 1rem; letter-spacing: 2px; pointer-events: none; }
 .rblx-badge { display: inline-flex; align-items: center; gap: 5px; font-family: var(--condensed); font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; border: 1px solid; margin-bottom: 8px; }
@@ -155,6 +155,10 @@ nav {
 .rblx-meta { display: flex; gap: 10px; flex-wrap: wrap; }
 .rblx-tag { font-family: var(--condensed); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 7px; border: 1px solid rgba(255,255,255,0.08); color: var(--muted); text-transform: uppercase; }
 .rblx-hidden { display: none; }
+.network-filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 2rem 0 1.5rem; }
+.net-filter { padding: 7px 16px; font-family: var(--condensed); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid var(--border2); color: var(--muted); background: transparent; cursor: pointer; transition: all 0.2s; }
+.net-filter:hover, .net-filter.active { border-color: var(--red); color: var(--red); background: rgba(230,57,70,0.06); }
+.net-hidden { display: none; }
 .network-card {
   background: var(--surface); padding: 2rem 1.75rem; position: relative; overflow: hidden;
   text-decoration: none; display: block; transition: background 0.3s;
@@ -448,6 +452,15 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
   .sched-badge { display: none; }
   .footer-inner { flex-direction: column; text-align: center; }
   .footer-socials { justify-content: center; }
+  .network-card { padding: 1.25rem 1rem; }
+  .network-card-name { font-size: 22px; }
+  .network-card-desc { font-size: 12px; margin-bottom: 0.75rem; }
+  .network-card-num { font-size: 36px; }
+  .network-grid { grid-template-columns: 1fr; }
+  .roblox-grid { grid-template-columns: 1fr; }
+  .rblx-card { padding: 1.25rem 1rem; }
+  .network-filters, .roblox-filters { gap: 6px; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+  .net-filter, .rblx-filter { white-space: nowrap; flex-shrink: 0; }
 }
 @media (max-width: 480px) {
   .nav-links { display: none; }
@@ -619,15 +632,16 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
         One brand, multiple lanes. Tam2Real at the top — network investors locked in below. Every move connected.
       </p>
     </div>
-    <div class="network-grid fade-up" style="transition-delay:0.1s;">
+    <!-- Network Filters -->
+    <div class="network-filters fade-up" style="transition-delay:0.05s;">
+      <button class="net-filter active" onclick="filterNet('all',this)">All</button>
+      <button class="net-filter" onclick="filterNet('tam2real',this)">⬡ Tam2Real</button>
+      <button class="net-filter" onclick="filterNet('investor',this)">◈ Investors</button>
+      <button class="net-filter" onclick="filterNet('soon',this)">◌ Coming Soon</button>
+    </div>
 
-      <!-- ── TAM2REAL ── -->
-      <div class="network-divider">
-        <span class="network-divider-label" style="color:var(--red);">⬡ Tam2Real</span>
-        <div class="network-divider-line"></div>
-      </div>
-
-      <a href="trader-university.html" class="network-card gold">
+    <div class="network-grid fade-up" style="transition-delay:0.1s;" id="net-grid">
+<a href="trader-university.html" class="network-card gold" data-net="tam2real">
         <div class="network-card-num">01</div>
         <div class="network-card-tag">Finance Education</div>
         <div class="network-card-name">TRADER UNIVERSITY</div>
@@ -641,7 +655,7 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
         <div class="network-card-arrow">Enter Trader U →</div>
       </a>
 
-      <a href="pack.html" class="network-card green">
+      <a href="pack.html" class="network-card green" data-net="tam2real">
         <div class="network-card-num">02</div>
         <div class="network-card-tag">Stream Content</div>
         <div class="network-card-name">PACK OF THE DAY</div>
@@ -653,14 +667,7 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
         <div class="network-card-desc">Wheel picks the pack every stream. Smell it, rate it, W or L. Updated live each episode — lighter collection included.</div>
         <div class="network-card-arrow">See Today's Pack →</div>
       </a>
-
-      <!-- ── NETWORK INVESTORS ── -->
-      <div class="network-divider">
-        <span class="network-divider-label" style="color:var(--gold);">◈ Network Investors</span>
-        <div class="network-divider-line"></div>
-      </div>
-
-      <a href="highly_elevated.html" class="network-card green">
+<a href="highly_elevated.html" class="network-card green" data-net="investor">
         <div class="network-card-num">01</div>
         <div class="network-card-tag">Network Investor · Cannabis</div>
         <div class="network-card-name">HIGHLY ELEVATED</div>
@@ -673,7 +680,7 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
         <div class="network-card-arrow">Visit Highly Elevated →</div>
       </a>
 
-      <a href="niko_tha_barber.html" class="network-card teal">
+      <a href="niko_tha_barber.html" class="network-card teal" data-net="investor">
         <div class="network-card-num">02</div>
         <div class="network-card-tag">Network Investor · Barbershop</div>
         <div class="network-card-name">NIKO THA BARBER</div>
@@ -686,7 +693,7 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
         <div class="network-card-arrow">Book a Cut →</div>
       </a>
 
-      <a href="agency/agency.html" class="network-card gold2">
+      <a href="agency/agency.html" class="network-card gold2" data-net="investor">
         <div class="network-card-num">03</div>
         <div class="network-card-tag">Network Investor · Web Agency</div>
         <div class="network-card-name">TAMBUILDS</div>
@@ -699,7 +706,7 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
         <div class="network-card-arrow">See the Agency →</div>
       </a>
 
-      <a href="hotmama.html" class="network-card" style="border-top-color:#f4813a;">
+      <a href="hotmama.html" class="network-card" data-net="investor" style="border-top-color:#f4813a;">
         <div class="network-card-num">04</div>
         <div class="network-card-tag" style="color:#f4813a;">Network Investor · Spice Brand</div>
         <div class="network-card-name">HOT MAMA</div>
@@ -712,7 +719,7 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
         <div class="network-card-arrow">Visit Hot Mama →</div>
       </a>
 
-      <a href="nextlvl.html" class="network-card teal">
+      <a href="nextlvl.html" class="network-card teal" data-net="investor">
         <div class="network-card-num">05</div>
         <div class="network-card-tag">Network Investor · Education</div>
         <div class="network-card-name">NEXT LVL</div>
@@ -724,14 +731,7 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
         <div class="network-card-desc">Finance, mindset, marketing, and personal development — built for people who are serious about the come-up. Level up for real.</div>
         <div class="network-card-arrow">Enter Next LVL →</div>
       </a>
-
-      <!-- ── COMING SOON ── -->
-      <div class="network-divider">
-        <span class="network-divider-label" style="color:var(--muted);">◌ Coming Soon</span>
-        <div class="network-divider-line"></div>
-      </div>
-
-      <div class="network-card red" style="cursor:default;">
+<div class="network-card red" style="cursor:default;" data-net="soon">
         <div class="network-card-num">01</div>
         <div class="network-card-tag">Coming Soon · Food</div>
         <div class="network-card-name">TAMONLY PANS</div>
@@ -775,7 +775,7 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
     <!-- Game Cards -->
     <div class="roblox-grid fade-up" style="transition-delay:0.1s;" id="rblx-grid">
 
-      <div class="rblx-card" data-genre="adventure">
+      <a href="https://www.roblox.com/games/2753915549/Blox-Fruits" target="_blank" class="rblx-card" data-genre="adventure">
         <div class="rblx-rank">1</div>
         <div class="rblx-badge" style="color:#ffd166;border-color:rgba(255,209,102,0.3);">⚔️ Adventure · Fighting</div>
         <div class="rblx-name">BLOX FRUITS</div>
@@ -786,9 +786,10 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
           <span class="rblx-tag">30B+ Visits</span>
           <span class="rblx-tag">Stream-Ready</span>
         </div>
-      </div>
+      
+        <div style="font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c8ff;margin-top:8px;">🎮 Play Blox Fruits →</div></a>
 
-      <div class="rblx-card" data-genre="horror">
+      <a href="https://www.roblox.com/games/6516141723/DOORS" target="_blank" class="rblx-card" data-genre="horror">
         <div class="rblx-rank">2</div>
         <div class="rblx-badge" style="color:#ff6b6b;border-color:rgba(230,57,70,0.3);">👻 Horror · Puzzle</div>
         <div class="rblx-name">DOORS</div>
@@ -799,9 +800,10 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
           <span class="rblx-tag">8B+ Visits</span>
           <span class="rblx-tag">Multiplayer</span>
         </div>
-      </div>
+      
+        <div style="font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c8ff;margin-top:8px;">🎮 Play DOORS →</div></a>
 
-      <div class="rblx-card" data-genre="roleplay">
+      <a href="https://www.roblox.com/games/4924922222/Brookhaven-RP" target="_blank" class="rblx-card" data-genre="roleplay">
         <div class="rblx-rank">3</div>
         <div class="rblx-badge" style="color:#4cc9f0;border-color:rgba(76,201,240,0.3);">🏙️ Roleplay</div>
         <div class="rblx-name">BROOKHAVEN</div>
@@ -812,9 +814,10 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
           <span class="rblx-tag">50B+ Visits</span>
           <span class="rblx-tag">Chill Mode</span>
         </div>
-      </div>
+      
+        <div style="font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c8ff;margin-top:8px;">🎮 Play Brookhaven →</div></a>
 
-      <div class="rblx-card" data-genre="shooter">
+      <a href="https://www.roblox.com/games/286090429/Arsenal" target="_blank" class="rblx-card" data-genre="shooter">
         <div class="rblx-rank">4</div>
         <div class="rblx-badge" style="color:#f4813a;border-color:rgba(244,129,58,0.3);">🔫 Shooter · FPS</div>
         <div class="rblx-name">ARSENAL</div>
@@ -825,9 +828,10 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
           <span class="rblx-tag">3B+ Visits</span>
           <span class="rblx-tag">Competitive</span>
         </div>
-      </div>
+      
+        <div style="font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c8ff;margin-top:8px;">🎮 Play Arsenal →</div></a>
 
-      <div class="rblx-card" data-genre="roleplay">
+      <a href="https://www.roblox.com/games/142823291/Murder-Mystery-2" target="_blank" class="rblx-card" data-genre="roleplay">
         <div class="rblx-rank">5</div>
         <div class="rblx-badge" style="color:#ec4899;border-color:rgba(236,72,153,0.3);">🏙️ Roleplay · Social</div>
         <div class="rblx-name">MURDER MYSTERY 2</div>
@@ -838,9 +842,10 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
           <span class="rblx-tag">8B+ Visits</span>
           <span class="rblx-tag">Trading</span>
         </div>
-      </div>
+      
+        <div style="font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c8ff;margin-top:8px;">🎮 Play MM2 →</div></a>
 
-      <div class="rblx-card" data-genre="obby">
+      <a href="https://www.roblox.com/games/1962086868/Tower-of-Hell" target="_blank" class="rblx-card" data-genre="obby">
         <div class="rblx-rank">6</div>
         <div class="rblx-badge" style="color:#22c55e;border-color:rgba(34,197,94,0.3);">🏃 Obby · Platformer</div>
         <div class="rblx-name">TOWER OF HELL</div>
@@ -851,9 +856,10 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
           <span class="rblx-tag">14B+ Visits</span>
           <span class="rblx-tag">Rage Mode</span>
         </div>
-      </div>
+      
+        <div style="font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c8ff;margin-top:8px;">🎮 Play Tower of Hell →</div></a>
 
-      <div class="rblx-card" data-genre="simulator">
+      <a href="https://www.roblox.com/games/6284583030/Pet-Simulator-X" target="_blank" class="rblx-card" data-genre="simulator">
         <div class="rblx-rank">7</div>
         <div class="rblx-badge" style="color:#9147ff;border-color:rgba(145,71,255,0.3);">🐾 Simulator</div>
         <div class="rblx-name">PET SIMULATOR X</div>
@@ -864,9 +870,10 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
           <span class="rblx-tag">6B+ Visits</span>
           <span class="rblx-tag">Trading</span>
         </div>
-      </div>
+      
+        <div style="font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c8ff;margin-top:8px;">🎮 Play Pet Sim X →</div></a>
 
-      <div class="rblx-card" data-genre="rpg">
+      <a href="https://www.roblox.com/games/15532962292/Sols-RNG" target="_blank" class="rblx-card" data-genre="rpg">
         <div class="rblx-rank">8</div>
         <div class="rblx-badge" style="color:#2de4d4;border-color:rgba(45,228,212,0.3);">🌀 RPG · Anime</div>
         <div class="rblx-name">SOL'S RNG</div>
@@ -877,9 +884,10 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
           <span class="rblx-tag">Trending 2025</span>
           <span class="rblx-tag">Aura Hunt</span>
         </div>
-      </div>
+      
+        <div style="font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c8ff;margin-top:8px;">🎮 Play Sol's RNG →</div></a>
 
-      <div class="rblx-card" data-genre="adventure">
+      <a href="https://www.roblox.com/games/189707/Natural-Disaster-Survival" target="_blank" class="rblx-card" data-genre="adventure">
         <div class="rblx-rank">9</div>
         <div class="rblx-badge" style="color:#ffd166;border-color:rgba(255,209,102,0.3);">⚔️ Adventure · Survival</div>
         <div class="rblx-name">NATURAL DISASTER SURVIVAL</div>
@@ -890,9 +898,10 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
           <span class="rblx-tag">3B+ Visits</span>
           <span class="rblx-tag">Squad Goals</span>
         </div>
-      </div>
+      
+        <div style="font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c8ff;margin-top:8px;">🎮 Play NDS →</div></a>
 
-      <div class="rblx-card" data-genre="rpg">
+      <a href="https://www.roblox.com/games/7141754047/Anime-Dimensions-Simulator" target="_blank" class="rblx-card" data-genre="rpg">
         <div class="rblx-rank">10</div>
         <div class="rblx-badge" style="color:#2de4d4;border-color:rgba(45,228,212,0.3);">🌀 RPG · Anime</div>
         <div class="rblx-name">ANIME DIMENSIONS</div>
@@ -903,7 +912,8 @@ footer { background: var(--surface); padding: 3rem 2rem; border-top: 1px solid v
           <span class="rblx-tag">2B+ Visits</span>
           <span class="rblx-tag">Collab Heavy</span>
         </div>
-      </div>
+      
+        <div style="font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c8ff;margin-top:8px;">🎮 Play Anime Dimensions →</div></a>
 
     </div>
 
@@ -927,6 +937,17 @@ function filterRblx(genre, btn) {
       card.classList.remove('rblx-hidden');
     } else {
       card.classList.add('rblx-hidden');
+    }
+  });
+}
+function filterNet(cat, btn) {
+  document.querySelectorAll('.net-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.network-card').forEach(card => {
+    if (cat === 'all' || card.dataset.net === cat) {
+      card.classList.remove('net-hidden');
+    } else {
+      card.classList.add('net-hidden');
     }
   });
 }
