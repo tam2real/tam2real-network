@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Tam2Real System — Level Up IRL</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#030309;--bg2:#070712;--surface:#0a0a18;--surface2:#10102a;--border:rgba(120,100,255,0.08);--border2:rgba(120,100,255,0.25);--purple:#8a5cf6;--purple2:#c4b5fd;--cyan:#22d3ee;--gold:#fbbf24;--red:#f43f5e;--white:#f5f3ff;--muted:#6b6b8a;--display:'Bebas Neue',sans-serif;--body:'Barlow',sans-serif;--condensed:'Barlow Condensed',sans-serif;--mono:'JetBrains Mono',monospace;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--white);font-family:var(--body);overflow-x:hidden;min-height:100vh;background-image:radial-gradient(ellipse at top,rgba(138,92,246,0.08) 0%,transparent 60%),radial-gradient(ellipse at bottom,rgba(34,211,238,0.05) 0%,transparent 60%);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(138,92,246,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(138,92,246,0.05) 1px,transparent 1px);background-size:40px 40px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 1.5rem;height:58px;display:flex;align-items:center;justify-content:space-between;background:rgba(3,3,9,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border2);}
+.nav-logo{font-family:var(--display);font-size:22px;letter-spacing:2px;text-decoration:none;color:var(--white);}
+.nav-logo span{color:var(--purple);}
+.nav-back{font-family:var(--condensed);font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.nav-back:hover{color:var(--purple2);}
+.nav-badge{font-family:var(--condensed);font-size:11px;font-weight:700;letter-spacing:0.15em;color:var(--purple);border:1px solid var(--border2);padding:5px 12px;text-transform:uppercase;}
+.hero{position:relative;padding:7rem 1.5rem 4rem;max-width:980px;margin:0 auto;text-align:center;}
+.status-window{display:inline-block;background:rgba(10,10,24,0.92);border:1px solid var(--purple);box-shadow:0 0 40px rgba(138,92,246,0.25),inset 0 0 40px rgba(138,92,246,0.05);padding:2rem 2.5rem;margin-top:1rem;text-align:left;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));min-width:min(520px,92vw);position:relative;}
+.status-window::before{content:'STATUS';position:absolute;top:-10px;left:20px;background:var(--bg);padding:0 10px;font-family:var(--mono);font-size:11px;color:var(--purple);letter-spacing:0.2em;}
+.status-title{font-family:var(--display);font-size:clamp(38px,7vw,72px);letter-spacing:2px;line-height:0.92;margin-bottom:0.5rem;}
+.status-title span{color:var(--purple);}
+.status-sub{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:0.15em;margin-bottom:1.5rem;text-transform:uppercase;}
+.status-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;padding:6px 0;border-bottom:1px dashed rgba(138,92,246,0.15);}
+.status-row:last-of-type{border-bottom:none;}
+.status-row .key{color:var(--muted);}
+.status-row .val{color:var(--white);font-weight:700;}
+.status-row .val.gold{color:var(--gold);}
+.status-row .val.cyan{color:var(--cyan);}
+.status-row .val.purple{color:var(--purple2);}
+.hero-tag{font-family:var(--condensed);font-size:14px;color:rgba(245,243,255,0.7);max-width:620px;margin:2rem auto 0;line-height:1.75;}
+.section{max-width:980px;margin:0 auto;padding:4rem 1.5rem;position:relative;z-index:1;}
+.section-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;color:var(--purple);margin-bottom:0.5rem;}
+.section-eyebrow::before{content:'❇ ';}
+.section-title{font-family:var(--display);font-size:clamp(36px,6vw,56px);letter-spacing:2px;line-height:0.95;margin-bottom:0.75rem;}
+.section-title span{color:var(--purple);}
+.section-intro{font-size:15px;color:rgba(245,243,255,0.65);line-height:1.75;max-width:620px;margin-bottom:2rem;}
+.quest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--border2);}
+.quest{background:var(--surface);padding:1.75rem;position:relative;border-top:3px solid var(--purple);transition:all 0.25s;}
+.quest:hover{background:var(--surface2);transform:translateY(-2px);}
+.quest.daily{border-top-color:var(--cyan);}
+.quest.daily .q-tag{color:var(--cyan);}
+.quest.boss{border-top-color:var(--red);}
+.quest.boss .q-tag{color:var(--red);}
+.quest.hidden{border-top-color:var(--gold);}
+.quest.hidden .q-tag{color:var(--gold);}
+.q-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--purple);text-transform:uppercase;margin-bottom:8px;}
+.q-name{font-family:var(--display);font-size:24px;letter-spacing:1px;margin-bottom:0.5rem;}
+.q-desc{font-size:14px;color:rgba(245,243,255,0.65);line-height:1.6;margin-bottom:1rem;}
+.q-rewards{display:flex;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;}
+.q-reward{background:rgba(138,92,246,0.08);border:1px solid var(--border2);padding:3px 8px;color:var(--purple2);}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:2rem;}
+.stat-bar{background:var(--surface);padding:1.25rem 1.5rem;border-left:3px solid var(--purple);}
+.stat-label{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;}
+.stat-val{font-family:var(--display);font-size:32px;letter-spacing:1px;margin-top:4px;}
+.stat-val span{color:var(--muted);font-size:20px;}
+.stat-bar-fill{height:4px;background:rgba(138,92,246,0.15);margin-top:10px;overflow:hidden;}
+.stat-bar-fill > div{height:100%;background:linear-gradient(90deg,var(--purple),var(--cyan));}
+.skill-tree{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--border2);margin-top:2rem;}
+.skill{background:var(--surface);padding:1.5rem;border-left:2px solid var(--purple);}
+.skill-icon{font-size:28px;margin-bottom:8px;}
+.skill-name{font-family:var(--display);font-size:20px;letter-spacing:1px;margin-bottom:0.25rem;}
+.skill-level{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:0.1em;margin-bottom:0.5rem;}
+.skill-desc{font-size:13px;color:rgba(245,243,255,0.62);line-height:1.55;}
+.rules-box{background:var(--surface);border:1px solid var(--purple);padding:2rem;margin-top:2rem;box-shadow:0 0 30px rgba(138,92,246,0.1),inset 0 0 20px rgba(138,92,246,0.03);clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));}
+.rules-title{font-family:var(--mono);font-size:11px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;}
+.rules-list{display:flex;flex-direction:column;gap:10px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-family:var(--condensed);font-size:15px;letter-spacing:0.03em;}
+.rule-item .num{font-family:var(--mono);color:var(--purple);font-size:12px;min-width:28px;padding-top:3px;}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:2rem;}
+.btn{padding:13px 28px;font-family:var(--condensed);font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));transition:all 0.2s;}
+.btn-primary{background:var(--purple);color:#050010;}
+.btn-primary:hover{background:var(--purple2);}
+.btn-outline{background:transparent;color:var(--purple2);border:1px solid var(--border2);}
+.btn-outline:hover{border-color:var(--purple);color:var(--white);}
+footer{border-top:1px solid var(--border2);padding:2rem 1.5rem;text-align:center;margin-top:3rem;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.1em;}
+footer a{color:var(--purple2);text-decoration:none;}
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+@media(max-width:640px){.status-window{padding:1.5rem 1.25rem;min-width:0;width:100%;}.quest-grid,.skill-tree{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-back">← Back to Network</a>
+  <a href="index.html" class="nav-logo">TAM<span>2</span>REAL</a>
+  <div class="nav-badge">❇ SYSTEM</div>
+</nav>
+<section class="hero">
+  <div class="status-window fade-up">
+    <div class="status-title">THE <span>SYSTEM</span></div>
+    <div class="status-sub">&gt; PLAYER: TAM2REAL &nbsp;&nbsp; &gt; STATUS: AWAKENED</div>
+    <div class="status-row"><span class="key">CLASS</span><span class="val gold">Network Architect</span></div>
+    <div class="status-row"><span class="key">REALM</span><span class="val">Akwesasne → Worldwide</span></div>
+    <div class="status-row"><span class="key">LEVEL</span><span class="val cyan">∞ / still leveling</span></div>
+    <div class="status-row"><span class="key">TITLE</span><span class="val purple">The One Who Monetizes Hobbies</span></div>
+    <div class="status-row"><span class="key">CORE SKILL</span><span class="val">Build. Trade. Repeat.</span></div>
+  </div>
+  <p class="hero-tag fade-up">The Tam2Real System isn't a metaphor — it's a daily protocol. Every habit, every trade, every stream, every rep is an XP drop. This page is the log. Think of it like a Solo Leveling status window, but for real life.</p>
+</section>
+<section class="section fade-up">
+  <div class="section-eyebrow">DAILY PROTOCOL</div>
+  <h2 class="section-title">QUEST <span>LOG</span></h2>
+  <p class="section-intro">Every day the System posts quests. Miss them and XP decays. Hit them and the stats compound.</p>
+  <div class="quest-grid">
+    <div class="quest daily"><div class="q-tag">DAILY · REPEATABLE</div><div class="q-name">⚔️ 5 TRADES / DAY</div><div class="q-desc">Paper or live, analyze 5 setups before the close. Journal each one. No exceptions.</div><div class="q-rewards"><span class="q-reward">+10 XP</span><span class="q-reward">+INT</span></div></div>
+    <div class="quest daily"><div class="q-tag">DAILY · BODY</div><div class="q-name">💪 TRAIN THE VESSEL</div><div class="q-desc">Calisthenics, boxing, or a run. Pick one. Every single day. The mind follows the body.</div><div class="q-rewards"><span class="q-reward">+10 XP</span><span class="q-reward">+STR</span><span class="q-reward">+END</span></div></div>
+    <div class="quest daily"><div class="q-tag">DAILY · MIND</div><div class="q-name">📚 STUDY 30 MIN</div><div class="q-desc">Charts, books, systems, anything that stacks knowledge. 30 minutes minimum. No doom scrolling.</div><div class="q-rewards"><span class="q-reward">+8 XP</span><span class="q-reward">+WIS</span></div></div>
+    <div class="quest boss"><div class="q-tag">WEEKLY BOSS</div><div class="q-name">🟥 SHIP ONE STREAM</div><div class="q-desc">Go live at least once per week. Consistency beats perfection. The audience builds through reps.</div><div class="q-rewards"><span class="q-reward">+50 XP</span><span class="q-reward">+CHA</span><span class="q-reward">+CRAFT</span></div></div>
+    <div class="quest boss"><div class="q-tag">WEEKLY BOSS</div><div class="q-name">📦 SHIP ONE THING</div><div class="q-desc">One product, one post, one system improvement. Something that didn't exist before this week now does.</div><div class="q-rewards"><span class="q-reward">+50 XP</span><span class="q-reward">+CRAFT</span></div></div>
+    <div class="quest hidden"><div class="q-tag">HIDDEN QUEST</div><div class="q-name">🤏 HELP SOMEONE QUIETLY</div><div class="q-desc">No announcement. No post. Just help. This one only you track.</div><div class="q-rewards"><span class="q-reward">+25 XP</span><span class="q-reward">+WIS</span><span class="q-reward">+KARMA</span></div></div>
+    <div class="quest daily"><div class="q-tag">SUMMER RECURRING</div><div class="q-name">🌿 LAWN PATROL</div><div class="q-desc">Handle the lawn. Don't let it slide. Mama's side too. This is not optional once the snow melts.</div><div class="q-rewards"><span class="q-reward">+5 XP</span><span class="q-reward">+REP</span><span class="q-reward">+PEACE</span></div></div>
+  </div>
+</section>
+<section class="section fade-up">
+  <div class="section-eyebrow">PLAYER STATS</div>
+  <h2 class="section-title">CORE <span>STATS</span></h2>
+  <div class="stats-grid">
+    <div class="stat-bar"><div class="stat-label">INT — Intelligence</div><div class="stat-val">64<span>/100</span></div><div class="stat-bar-fill"><div style="width:64%"></div></div></div>
+    <div class="stat-bar"><div class="stat-label">STR — Strength</div><div class="stat-val">71<span>/100</span></div><div class="stat-bar-fill"><div style="width:71%"></div></div></div>
+    <div class="stat-bar"><div class="stat-label">CHA — Charisma</div><div class="stat-val">58<span>/100</span></div><div class="stat-bar-fill"><div style="width:58%"></div></div></div>
+    <div class="stat-bar"><div class="stat-label">CRAFT — Building</div><div class="stat-val">82<span>/100</span></div><div class="stat-bar-fill"><div style="width:82%"></div></div></div>
+    <div class="stat-bar"><div class="stat-label">WIS — Wisdom</div><div class="stat-val">67<span>/100</span></div><div class="stat-bar-fill"><div style="width:67%"></div></div></div>
+    <div class="stat-bar"><div class="stat-label">END — Endurance</div><div class="stat-val">74<span>/100</span></div><div class="stat-bar-fill"><div style="width:74%"></div></div></div>
+  </div>
+</section>
+<section class="section fade-up">
+  <div class="section-eyebrow">ABILITIES UNLOCKED</div>
+  <h2 class="section-title">SKILL <span>TREE</span></h2>
+  <div class="skill-tree">
+    <div class="skill"><div class="skill-icon">📈</div><div class="skill-name">CHART READING</div><div class="skill-level">LVL 14 — ACTIVE</div><div class="skill-desc">Support, resistance, and momentum. Can read a chart cold in under 60 seconds.</div></div>
+    <div class="skill"><div class="skill-icon">🎮</div><div class="skill-name">LIVE STREAMING</div><div class="skill-level">LVL 9 — ACTIVE</div><div class="skill-desc">Camera on, brain on. Building in public while the stream rolls.</div></div>
+    <div class="skill"><div class="skill-icon">🔧</div><div class="skill-name">BUILDING IN PUBLIC</div><div class="skill-level">LVL 21 — MASTERY</div><div class="skill-desc">Documenting the journey and shipping. The work is the marketing.</div></div>
+    <div class="skill"><div class="skill-icon">🥊</div><div class="skill-name">COMBAT SPORTS</div><div class="skill-level">LVL 11 — ACTIVE</div><div class="skill-desc">Boxing, footwork, conditioning. The discipline carries into everything else.</div></div>
+    <div class="skill"><div class="skill-icon">⚽</div><div class="skill-name">THE BEAUTIFUL GAME</div><div class="skill-level">LVL 18 — ACTIVE</div><div class="skill-desc">Soccer. The original sport. Summer league is the proving ground.</div></div>
+    <div class="skill"><div class="skill-icon">⚙️</div><div class="skill-name">SYSTEMS THINKING</div><div class="skill-level">LVL 16 — ACTIVE</div><div class="skill-desc">Seeing the process behind the result. Automating the repeatable. Scaling the scalable.</div></div>
+  </div>
+</section>
+<section class="section fade-up">
+  <div class="section-eyebrow">LAWS OF THE SYSTEM</div>
+  <h2 class="section-title">SYSTEM <span>RULES</span></h2>
+  <div class="rules-box">
+    <div class="rules-title">[ NON-NEGOTIABLE ]</div>
+    <div class="rules-list">
+      <div class="rule-item"><span class="num">01.</span><span>No zero days. Something always ships.</span></div>
+      <div class="rule-item"><span class="num">02.</span><span>Paper trade until support and resistance are second nature. Real money comes after real understanding.</span></div>
+      <div class="rule-item"><span class="num">03.</span><span>Be careful who you learn from. The right teacher changes lives. The wrong one destroys them.</span></div>
+      <div class="rule-item"><span class="num">04.</span><span>The body is the hardware. Neglect it and everything else slows down.</span></div>
+      <div class="rule-item"><span class="num">05.</span><span>Build for the next generation. The old way is dead. We are the new way.</span></div>
+      <div class="rule-item"><span class="num">06.</span><span>Monetize the hobbies. If you love it and you're good at it, there's a market for it.</span></div>
+      <div class="rule-item"><span class="num">07.</span><span>Document everything. The journey is the product.</span></div>
+      <div class="rule-item"><span class="num">08.</span><span>If they don't see the vision, that's not your job. Keep building. The results do the talking.</span></div>
+    </div>
+  </div>
+  <div class="cta-row">
+    <a href="trader-university.html" class="btn btn-primary">Trader University</a>
+    <a href="tam2realiron.html" class="btn btn-outline">Tam2Real Iron</a>
+    <a href="index.html" class="btn btn-outline">← Network</a>
+  </div>
+</section>
+<footer>
+  <div>TAM<span style="color:var(--purple);">2</span>REAL SYSTEM &nbsp;◆&nbsp; <a href="index.html">Network</a> &nbsp;◆&nbsp; <a href="trader-university.html">Trading</a> &nbsp;◆&nbsp; <a href="tam2realiron.html">Iron</a></div>
+  <div style="margin-top:8px;opacity:0.5;">Level up or get left behind.</div>
+</footer>
+<script>
+const obs = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
