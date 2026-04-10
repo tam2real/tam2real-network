@@ -6,508 +6,144 @@
 <title>Trader University — Tam2Real</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #050508;
-  --surface: #0d0d14;
-  --surface2: #13131e;
-  --border: rgba(255,255,255,0.06);
-  --border2: rgba(255,255,255,0.12);
-  --red: #e63946;
-  --gold: #ffd166;
-  --gold2: #ffb703;
-  --blue: #4cc9f0;
-  --white: #f0eff4;
-  --muted: #6b6b80;
-  --display: 'Bebas Neue', sans-serif;
-  --body: 'Barlow', sans-serif;
-  --condensed: 'Barlow Condensed', sans-serif;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--white); font-family: var(--body); overflow-x: hidden; min-height: 100vh; }
-
-body::before {
-  content: ''; position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 1000; opacity: 0.5;
-}
-
-/* GATE SCREENS */
-.gate-screen {
-  position: fixed; inset: 0; z-index: 9999;
-  background: var(--bg); display: flex; align-items: center; justify-content: center;
-  flex-direction: column; text-align: center; padding: 2rem;
-}
-.gate-screen.gone { display: none; }
-#main-content { display: none; }
-#main-content.visible { display: block; }
-
-.gate-logo { font-family: var(--display); font-size: 40px; letter-spacing: 4px; margin-bottom: 0.25rem; }
-.gate-logo span { color: var(--red); }
-.gate-icon { font-size: 64px; margin: 1rem 0; }
-.gate-title { font-family: var(--display); font-size: clamp(32px,7vw,58px); letter-spacing: 2px; line-height: 1; margin-bottom: 0.75rem; }
-.gate-sub { font-family: var(--condensed); font-size: 15px; color: rgba(240,239,244,0.55); max-width: 400px; line-height: 1.7; margin-bottom: 2.5rem; letter-spacing: 0.05em; }
-.gate-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-.gate-btn-yes {
-  padding: 14px 40px; background: var(--gold); color: #050508;
-  font-family: var(--condensed); font-size: 16px; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase; border: none; cursor: pointer;
-  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-  transition: all 0.2s;
-}
-.gate-btn-yes:hover { background: var(--gold2); transform: translateY(-2px); }
-.gate-btn-no {
-  padding: 14px 40px; background: transparent; color: var(--muted);
-  font-family: var(--condensed); font-size: 16px; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  border: 1px solid var(--border2); cursor: pointer;
-  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-  transition: all 0.2s;
-}
-.gate-btn-no:hover { color: var(--red); border-color: var(--red); }
-.gate-disclaimer { font-family: var(--condensed); font-size: 11px; color: var(--muted); max-width: 340px; line-height: 1.6; margin-top: 1.5rem; letter-spacing: 0.04em; }
-
-/* QUIZ */
-.quiz-wrap { width: 100%; max-width: 540px; text-align: left; }
-.quiz-progress-bar { height: 3px; background: var(--border2); margin-bottom: 2rem; border-radius: 2px; overflow: hidden; }
-.quiz-progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s ease; }
-.quiz-q-num { font-family: var(--condensed); font-size: 11px; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.5rem; }
-.quiz-q-text { font-family: var(--display); font-size: clamp(22px, 4vw, 32px); letter-spacing: 1px; line-height: 1.1; margin-bottom: 1.75rem; }
-.quiz-options { display: flex; flex-direction: column; gap: 10px; }
-.quiz-opt {
-  padding: 14px 18px; background: var(--surface); border: 1px solid var(--border2);
-  font-family: var(--condensed); font-size: 15px; font-weight: 600; letter-spacing: 0.05em;
-  color: var(--white); cursor: pointer; text-align: left; transition: all 0.2s;
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-}
-.quiz-opt:hover { border-color: var(--gold); background: rgba(255,209,102,0.06); color: var(--gold); }
-.quiz-opt.correct { border-color: #22c55e; background: rgba(34,197,94,0.1); color: #22c55e; pointer-events: none; }
-.quiz-opt.wrong { border-color: var(--red); background: rgba(230,57,70,0.1); color: var(--red); pointer-events: none; }
-.quiz-opt.disabled { pointer-events: none; opacity: 0.4; }
-.quiz-feedback { margin-top: 1rem; font-family: var(--condensed); font-size: 14px; letter-spacing: 0.06em; line-height: 1.6; min-height: 44px; }
-.quiz-feedback.good { color: #22c55e; }
-.quiz-feedback.bad { color: var(--red); }
-.quiz-next {
-  margin-top: 1.5rem; padding: 13px 32px; background: var(--gold); color: #050508;
-  font-family: var(--condensed); font-size: 15px; font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase; border: none; cursor: pointer; display: none;
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-  transition: all 0.2s;
-}
-.quiz-next:hover { background: var(--gold2); }
-.quiz-next.show { display: inline-block; }
-
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 0 1.5rem; height: 58px;
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(5,5,8,0.92); backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo { font-family: var(--display); font-size: 22px; letter-spacing: 2px; text-decoration: none; color: var(--white); }
-.nav-logo span { color: var(--red); }
-.nav-back { font-family: var(--condensed); font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-.nav-back:hover { color: var(--white); }
-.nav-badge { font-family: var(--condensed); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--gold); border: 1px solid rgba(255,209,102,0.3); padding: 4px 12px; }
-
-/* CONTENT */
-.page { max-width: 900px; margin: 0 auto; padding: 80px 1.5rem 5rem; }
-.section-label { font-family: var(--condensed); font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
-.section-label::before { content: ''; width: 24px; height: 2px; background: var(--gold); }
-.section-title { font-family: var(--display); font-size: clamp(44px,8vw,80px); letter-spacing: 2px; line-height: 0.92; margin-bottom: 1rem; }
-.section-title span { color: var(--gold); }
-
-/* CONCEPT CARDS */
-.concepts { display: flex; flex-direction: column; gap: 1px; background: var(--border); margin-top: 3rem; }
-.concept-card { background: var(--surface); padding: 2rem; position: relative; overflow: hidden; transition: background 0.3s; }
-.concept-card:hover { background: var(--surface2); }
-.concept-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gold); }
-.concept-num { font-family: var(--display); font-size: 52px; color: rgba(255,209,102,0.1); position: absolute; top: 1rem; right: 1.5rem; line-height: 1; letter-spacing: 2px; }
-.concept-tag { font-family: var(--condensed); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
-.concept-name { font-family: var(--display); font-size: 28px; letter-spacing: 1px; margin-bottom: 0.75rem; }
-.concept-desc { font-size: 15px; color: rgba(240,239,244,0.65); line-height: 1.7; max-width: 600px; }
-.concept-callout { margin-top: 1rem; padding: 12px 16px; background: rgba(255,209,102,0.06); border: 1px solid rgba(255,209,102,0.2); font-family: var(--condensed); font-size: 14px; color: var(--gold); letter-spacing: 0.05em; display: inline-block; }
-
-/* BEACONS LINK */
-.trader-u-link {
-  margin-top: 3rem; padding: 2.5rem; background: var(--surface);
-  border: 1px solid var(--border2); border-top: 3px solid var(--gold);
-  text-align: center;
-}
-.trader-u-link h3 { font-family: var(--display); font-size: 36px; letter-spacing: 2px; margin-bottom: 0.75rem; }
-.trader-u-link p { font-size: 15px; color: rgba(240,239,244,0.6); line-height: 1.65; max-width: 480px; margin: 0 auto 2rem; }
-.trader-u-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 14px 36px; background: var(--gold); color: #050508;
-  font-family: var(--condensed); font-size: 15px; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
-  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-  transition: all 0.2s;
-}
-.trader-u-btn:hover { background: var(--gold2); transform: translateY(-2px); }
-
-.fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-.fade-up.visible { opacity: 1; transform: translateY(0); }
+:root{--bg:#03030a;--bg2:#07070f;--surface:#0a0a14;--surface2:#10101e;--border:rgba(20,184,166,0.08);--border2:rgba(20,184,166,0.2);--teal:#2de4d4;--gold:#fbbf24;--red:#f43f5e;--white:#f5f3ff;--muted:#6b6b8a;--display:'Bebas Neue',sans-serif;--body:'Barlow',sans-serif;--condensed:'Barlow Condensed',sans-serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--white);font-family:var(--body);overflow-x:hidden;min-height:100vh;background-image:radial-gradient(ellipse at top,rgba(20,184,166,0.06) 0%,transparent 60%);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(20,184,166,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(20,184,166,0.03) 1px,transparent 1px);background-size:40px 40px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 1.5rem;height:58px;display:flex;align-items:center;justify-content:space-between;background:rgba(3,3,10,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border2);}
+.nav-logo{font-family:var(--display);font-size:22px;letter-spacing:2px;text-decoration:none;color:var(--white);}
+.nav-logo span{color:var(--teal);}
+.nav-back{font-family:var(--condensed);font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.nav-back:hover{color:var(--white);}
+.hero{padding:7rem 1.5rem 4rem;max-width:980px;margin:0 auto;text-align:center;position:relative;z-index:1;}
+.hero-logo{width:100px;height:100px;object-fit:contain;margin:0 auto 1.5rem;display:block;filter:drop-shadow(0 0 20px rgba(45,228,212,0.3));}
+.hero-title{font-family:var(--display);font-size:clamp(48px,9vw,88px);letter-spacing:3px;line-height:0.9;margin-bottom:0.75rem;}
+.hero-title span{color:var(--teal);}
+.hero-sub{font-family:var(--condensed);font-size:14px;letter-spacing:0.2em;color:rgba(245,243,255,0.5);text-transform:uppercase;margin-bottom:2rem;}
+.hero-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.hero-btn{padding:12px 24px;font-family:var(--condensed);font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;border:1px solid var(--teal);color:var(--teal);transition:all 0.2s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+.hero-btn:hover{background:var(--teal);color:#020d0c;}
+.hero-btn.gold{border-color:var(--gold);color:var(--gold);}
+.hero-btn.gold:hover{background:var(--gold);color:#070500;}
+.section{max-width:980px;margin:0 auto;padding:4rem 1.5rem;position:relative;z-index:1;}
+.section-eyebrow{font-family:var(--condensed);font-size:11px;letter-spacing:0.2em;color:var(--teal);margin-bottom:0.5rem;text-transform:uppercase;}
+.section-eyebrow::before{content:'▶ ';}
+.section-title{font-family:var(--display);font-size:clamp(32px,5.5vw,52px);letter-spacing:2px;line-height:0.95;margin-bottom:0.75rem;}
+.section-title span{color:var(--teal);}
+.section-intro{font-size:15px;color:rgba(245,243,255,0.65);line-height:1.75;max-width:640px;margin-bottom:2rem;}
+.twitch-wrap{position:relative;width:100%;padding-bottom:56.25%;background:var(--surface);border:1px solid var(--border2);overflow:hidden;margin-top:1.5rem;}
+.twitch-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+.live-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);padding:6px 14px;font-family:var(--condensed);font-size:12px;font-weight:700;letter-spacing:0.15em;color:var(--red);text-transform:uppercase;margin-bottom:1rem;}
+.live-badge::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--border2);margin-top:1.5rem;}
+.tool-card{background:var(--surface);padding:2rem;border-top:3px solid var(--teal);position:relative;}
+.tool-card:hover{background:var(--surface2);}
+.tool-icon{font-size:32px;margin-bottom:1rem;}
+.tool-name{font-family:var(--display);font-size:26px;letter-spacing:1px;margin-bottom:0.4rem;}
+.tool-desc{font-size:14px;color:rgba(245,243,255,0.65);line-height:1.65;margin-bottom:1.25rem;}
+.tool-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--condensed);font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);text-decoration:none;border-bottom:1px solid rgba(45,228,212,0.3);padding-bottom:2px;}
+.tool-link:hover{color:var(--white);border-bottom-color:var(--white);}
+.vpn-note{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);padding:10px 14px;margin-top:12px;font-family:var(--condensed);font-size:12px;color:var(--gold);letter-spacing:0.05em;}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--border2);margin-top:1.5rem;}
+.news-card{background:var(--surface);padding:2rem;border-top:3px solid #6366f1;}
+.news-card:hover{background:var(--surface2);}
+.news-icon{font-size:28px;margin-bottom:0.75rem;}
+.news-name{font-family:var(--display);font-size:24px;letter-spacing:1px;margin-bottom:0.4rem;}
+.news-desc{font-size:14px;color:rgba(245,243,255,0.65);line-height:1.65;margin-bottom:1rem;}
+.news-link{font-family:var(--condensed);font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#818cf8;text-decoration:none;border-bottom:1px solid rgba(129,140,248,0.3);padding-bottom:2px;}
+.disclaimer-box{background:var(--surface);border-left:3px solid var(--gold);padding:2rem;margin-top:2rem;}
+.disclaimer-title{font-family:var(--condensed);font-size:11px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;}
+.disclaimer-text{font-size:15px;color:rgba(245,243,255,0.8);line-height:1.8;}
+.disclaimer-text strong{color:var(--gold);}
+footer{border-top:1px solid var(--border2);padding:2rem 1.5rem;text-align:center;margin-top:3rem;font-family:var(--condensed);font-size:11px;color:var(--muted);letter-spacing:0.1em;}
+footer a{color:rgba(245,243,255,0.45);text-decoration:none;}
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
 </style>
 </head>
 <body>
-
-<!-- SCREEN 1: 18+ AGE CHECK -->
-<div class="gate-screen" id="gate-age">
-  <div class="gate-logo">TAM<span>2</span>REAL</div>
-  <div class="gate-icon">
-    <img src="trader-university-logo.png" alt="Trader University" style="width:180px;height:180px;object-fit:contain;margin:1rem 0;">
-  </div>
-  <div class="gate-title" style="font-family:'Bebas Neue',sans-serif;letter-spacing:3px;">TRADER<br>UNIVERSITY</div>
-  <p class="gate-sub">Trading and investing content is intended for adults 18 and older. Financial decisions carry real risk. Are you 18 or older?</p>
-  <div class="gate-btns">
-    <button class="gate-btn-yes" onclick="showQuiz()">Yes, I'm 18+ 🎓</button>
-    <button class="gate-btn-no" onclick="denyAge()">No, I'm Under 18</button>
-  </div>
-  <p class="gate-disclaimer">This is educational content only — not financial advice. Always do your own research. Past performance does not guarantee future results.</p>
-</div>
-
-<!-- SCREEN 2: FINANCIAL LITERACY QUIZ -->
-<div class="gate-screen gone" id="gate-quiz">
-  <div class="gate-logo" style="margin-bottom:1.5rem;">TAM<span>2</span>REAL</div>
-  <div class="quiz-wrap">
-    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-progress" style="width:0%"></div></div>
-    <div class="quiz-q-num" id="quiz-qnum">Question 1 of 4</div>
-    <div class="quiz-q-text" id="quiz-question">Loading...</div>
-    <div class="quiz-options" id="quiz-options"></div>
-    <div class="quiz-feedback" id="quiz-feedback"></div>
-    <button class="quiz-next" id="quiz-next" onclick="nextQuestion()">Next →</button>
-  </div>
-</div>
-
-<!-- SCREEN 3: DENIED AGE -->
-<div class="gate-screen gone" id="gate-denied">
-  <div class="gate-logo">TAM<span>2</span>REAL</div>
-  <div class="gate-icon">🚫</div>
-  <div class="gate-title">COME BACK<br>WHEN YOU'RE OLDER</div>
-  <p class="gate-sub">Trader University is 18+ only. Keep watching the stream — you're already learning more than most!</p>
-  <a href="index.html" style="font-family:var(--condensed);font-size:15px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid rgba(255,209,102,0.4);padding:12px 28px;margin-top:1rem;display:inline-block;">← Back to Main Site</a>
-</div>
-
-<!-- SCREEN 4: FAILED QUIZ -->
-<div class="gate-screen gone" id="gate-failed">
-  <div class="gate-logo">TAM<span>2</span>REAL</div>
-  <div class="gate-icon">📚</div>
-  <div class="gate-title">NOT QUITE<br>YET.</div>
-  <p class="gate-sub">No shame — most people were never taught this stuff. Learn the basics first, then come back. The knowledge is free.</p>
-  <div style="display:flex;flex-direction:column;gap:10px;margin-top:1.5rem;width:100%;max-width:360px;">
-    <a href="https://www.khanacademy.org/college-careers-more/personal-finance" target="_blank" style="padding:12px 20px;background:var(--surface);border:1px solid var(--border2);color:var(--white);font-family:var(--condensed);font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;text-align:center;transition:border-color 0.2s;">Khan Academy — Personal Finance ↗</a>
-    <a href="https://www.schwab.com/learn/story/beyond-4-rule-how-much-can-you-spend-retirement" target="_blank" style="padding:12px 20px;background:var(--surface);border:1px solid var(--border2);color:var(--white);font-family:var(--condensed);font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;text-align:center;transition:border-color 0.2s;">Charles Schwab — The 4% Rule ↗</a>
-    <a href="https://www.reddit.com/r/financialindependence/wiki/faq" target="_blank" style="padding:12px 20px;background:var(--surface);border:1px solid var(--border2);color:var(--white);font-family:var(--condensed);font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;text-align:center;transition:border-color 0.2s;">Reddit — Financial Independence Wiki ↗</a>
-    <button onclick="resetQuiz()" style="padding:12px 20px;background:var(--gold);color:#050508;font-family:var(--condensed);font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border:none;cursor:pointer;margin-top:4px;">Try Again 🔄</button>
-  </div>
-</div>
-
-<!-- MAIN CONTENT -->
-<div id="main-content">
 <nav>
-  <a href="index.html" class="nav-back">← Back to Site</a>
+  <a href="index.html" class="nav-back">← Back to Network</a>
   <a href="index.html" class="nav-logo">TAM<span>2</span>REAL</a>
-  <div class="nav-badge">🎓 Trader U · 18+</div>
 </nav>
-
-<div class="page">
-
-  <div class="fade-up">
-    <div class="section-label">Financial Education · 18+</div>
-    <h1 class="section-title">TRADER<br><span>UNIVERSITY</span></h1>
-    <p style="font-size:16px;color:rgba(240,239,244,0.6);max-width:520px;line-height:1.7;margin-bottom:0.5rem;">
-      The stuff school never taught you. Real concepts, real math, real money moves.
-      From saving your first dollar to understanding how your money can work for you while you sleep.
-    </p>
-    <p style="font-family:var(--condensed);font-size:12px;color:var(--muted);letter-spacing:0.08em;margin-top:0.5rem;">⚠️ Educational only · Not financial advice · Do your own research</p>
+<section class="hero fade-up">
+  <img src="trader-university-logo.png" alt="Trader University" class="hero-logo">
+  <h1 class="hero-title">TRADER <span>UNIVERSITY</span></h1>
+  <p class="hero-sub">Learn. Practice. Execute. Repeat.</p>
+  <div class="hero-links">
+    <a href="https://tam2real.gumroad.com" target="_blank" class="hero-btn">🛒 Tam2Real Gumroad ↗</a>
+    <a href="https://www.ark-invest.com/big-ideas-2026" target="_blank" class="hero-btn gold">📘 ARK Big Ideas 2026 ↗</a>
   </div>
-
-  <div class="concepts fade-up" style="transition-delay:0.1s;">
-
-    <div class="concept-card">
-      <div class="concept-num">01</div>
-      <div class="concept-tag">Foundation</div>
-      <div class="concept-name">SAVE FIRST. ALWAYS.</div>
-      <div class="concept-desc">Before you invest, trade, or spend — pay yourself first. Set aside a percentage of every dollar that comes in before anything else. Most people save what's left over. That's why most people stay broke. Flip the order.</div>
-      <div class="concept-callout">Rule: Save at least 20% of every dollar you earn. Non-negotiable.</div>
-    </div>
-
-    <div class="concept-card">
-      <div class="concept-num">02</div>
-      <div class="concept-tag">The Mindset Shift</div>
-      <div class="concept-name">INVEST MORE THAN YOU SAVE</div>
-      <div class="concept-desc">Saving money in a bank account loses value every year due to inflation — around 3–4% per year the dollar gets weaker. Your savings sitting still is actually going backwards. The goal is to flip the ratio: invest more than you save. Put money into assets that grow — index funds, ETFs, real estate, businesses — so your money is working while you sleep.</div>
-      <div class="concept-callout">Cash in a savings account = slowly losing. Money in assets = compounding and growing.</div>
-    </div>
-
-    <div class="concept-card">
-      <div class="concept-num">03</div>
-      <div class="concept-tag">Compound Interest</div>
-      <div class="concept-name">MONEY MAKING MONEY</div>
-      <div class="concept-desc">Compound interest is the 8th wonder of the world. When your money earns returns, those returns also earn returns. $1,000 invested at 10% annually becomes $1,100 after year one. But year two it's not $1,100 + $100 — it's $1,210 because the $100 also earned 10%. The longer you leave it, the faster it snowballs. Time in the market beats timing the market.</div>
-      <div class="concept-callout">Start early. Even $50/month invested at 20 years old beats $500/month at 40.</div>
-    </div>
-
-    <div class="concept-card">
-      <div class="concept-num">04</div>
-      <div class="concept-tag">The 4% Rule · Financial Freedom</div>
-      <div class="concept-name">25X YOUR EXPENSES = FREEDOM NUMBER</div>
-      <div class="concept-desc">The 4% Rule is the foundation of financial independence. Take your annual expenses and multiply by 25 — that's your "freedom number." Once your invested portfolio hits that number, you can withdraw 4% per year forever without running out of money (historically). Your investments grow faster than you withdraw.</div>
-      <div class="concept-callout">
-        Example: Spend $40,000/year? Freedom number = $1,000,000.<br>
-        At $1M invested, withdraw $40,000/year (4%) and your money keeps growing.
-      </div>
-    </div>
-
-    <div class="concept-card">
-      <div class="concept-num">05</div>
-      <div class="concept-tag">The Order of Operations</div>
-      <div class="concept-name">HOW TO STACK THE RIGHT WAY</div>
-      <div class="concept-desc">Most people have no system. Here's the system — in order of priority:</div>
-      <div style="margin-top:1rem;display:flex;flex-direction:column;gap:8px;">
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,209,102,0.04);border-left:2px solid var(--gold);">
-          <span style="font-family:var(--display);font-size:22px;color:var(--gold);">1</span>
-          <span style="font-family:var(--condensed);font-size:14px;letter-spacing:0.05em;">Build a 3–6 month emergency fund first. No exceptions.</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,209,102,0.04);border-left:2px solid var(--gold);">
-          <span style="font-family:var(--display);font-size:22px;color:var(--gold);">2</span>
-          <span style="font-family:var(--condensed);font-size:14px;letter-spacing:0.05em;">Pay off high-interest debt (credit cards, payday loans).</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,209,102,0.04);border-left:2px solid var(--gold);">
-          <span style="font-family:var(--display);font-size:22px;color:var(--gold);">3</span>
-          <span style="font-family:var(--condensed);font-size:14px;letter-spacing:0.05em;">Max out tax-advantaged accounts (Roth IRA, 401k if available).</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,209,102,0.04);border-left:2px solid var(--gold);">
-          <span style="font-family:var(--display);font-size:22px;color:var(--gold);">4</span>
-          <span style="font-family:var(--condensed);font-size:14px;letter-spacing:0.05em;">Invest the rest in index funds, ETFs, or assets you understand.</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,209,102,0.04);border-left:2px solid var(--gold);">
-          <span style="font-family:var(--display);font-size:22px;color:var(--gold);">5</span>
-          <span style="font-family:var(--condensed);font-size:14px;letter-spacing:0.05em;">Only then — speculate, trade, and take calculated risks.</span>
-        </div>
-      </div>
-    </div>
-
+</section>
+<section class="section fade-up">
+  <div class="live-badge">LIVE</div>
+  <div class="section-eyebrow">STREAMING</div>
+  <h2 class="section-title">LIVE ON <span>TWITCH</span></h2>
+  <p class="section-intro">Chart analysis, trade breakdowns, and building in public. Tune in when the market is moving.</p>
+  <div class="twitch-wrap">
+    <iframe src="https://player.twitch.tv/?channel=tam2real&parent=tam2real.github.io&parent=tam2real.live&muted=true" allowfullscreen></iframe>
   </div>
-
-  <!-- Beacons Link -->
-  <div class="trader-u-link fade-up" style="transition-delay:0.2s;">
-    <h3>FULL TRADER UNIVERSITY</h3>
-    <p>More in-depth lessons, resources, and live trading education available through the official Trader University hub.</p>
-    <a href="https://beacons.ai/traderuniversity" class="trader-u-btn" target="_blank">🎓 Go to Trader University ↗</a>
-  </div>
-
-  <!-- FREE RESOURCES -->
-  <div id="resources" class="fade-up" style="transition-delay:0.3s;margin:2rem auto;max-width:860px;padding:0 1rem;">
-    <div style="text-align:center;margin-bottom:1.5rem;">
-      <div style="display:inline-block;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:0.3em;color:var(--gold);background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);padding:4px 14px;border-radius:2px;margin-bottom:10px;">FREE RESOURCES</div>
-      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:0.05em;color:var(--white);margin:0 0 6px;">DOWNLOAD THE PLAYBOOKS</h2>
-      <p style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:var(--muted);letter-spacing:0.04em;">Everything you need to start thinking like a trader. Free. No email required.</p>
+</section>
+<section class="section fade-up">
+  <div class="section-eyebrow">TOOLS</div>
+  <h2 class="section-title">THE <span>TOOLBOX</span></h2>
+  <p class="section-intro">The tools in rotation. Use the affiliate links to support the network.</p>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-icon">📈</div>
+      <div class="tool-name">TRADINGVIEW</div>
+      <div class="tool-desc">The chart platform. Real-time data, community ideas, and the cleanest interface in the game. Start free, upgrade when ready.</div>
+      <a href="https://www.tradingview.com/pricing/?share_your_love=sheesty" target="_blank" class="tool-link">Open TradingView ↗</a>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;">
-
-      <!-- PDF 1: Crypto Cheat Sheet -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--gold);border-radius:4px;padding:1.4rem;display:flex;flex-direction:column;gap:12px;">
-        <div style="font-size:2rem;">📊</div>
-        <div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.05em;color:var(--gold);">CRYPTO CHEAT SHEET</div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--muted);margin-top:4px;letter-spacing:0.03em;">Quick-reference guide to crypto terms, wallets, DCA strategy, and market cycles. Keep this open while you trade.</div>
-        </div>
-        <a href="Tam2Real Crypto Cheat Sheet.pdf" download style="display:block;text-align:center;background:var(--gold);color:#0a0202;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:0.15em;padding:10px 16px;border-radius:2px;text-decoration:none;margin-top:auto;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">⬇ DOWNLOAD PDF</a>
-      </div>
-
-      <!-- PDF 2: W or L Playbook -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--red);border-radius:4px;padding:1.4rem;display:flex;flex-direction:column;gap:12px;">
-        <div style="font-size:2rem;">🃏</div>
-        <div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.05em;color:var(--red);">W OR L PLAYBOOK</div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--muted);margin-top:4px;letter-spacing:0.03em;">The Tam2Real framework for evaluating every move — in trading, business, and life. Win more. Learn faster.</div>
-        </div>
-        <a href="Tam2Real WOrL Playbook.pdf" download style="display:block;text-align:center;background:var(--red);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:0.15em;padding:10px 16px;border-radius:2px;text-decoration:none;margin-top:auto;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">⬇ DOWNLOAD PDF</a>
-      </div>
-
-      <!-- PDF 3: Community Guide -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--teal);border-radius:4px;padding:1.4rem;display:flex;flex-direction:column;gap:12px;">
-        <div style="font-size:2rem;">🌐</div>
-        <div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.05em;color:var(--teal);">COMMUNITY GUIDE</div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--muted);margin-top:4px;letter-spacing:0.03em;">The Tam2Real Network vision, daily structure, ecosystem breakdown, and roadmap. Your onboarding doc to the crew.</div>
-        </div>
-        <a href="Tam2Real Community Guide.pdf" download style="display:block;text-align:center;background:var(--teal);color:#0a0202;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:0.15em;padding:10px 16px;border-radius:2px;text-decoration:none;margin-top:auto;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">⬇ DOWNLOAD PDF</a>
-      </div>
-
+    <div class="tool-card" style="border-top-color:var(--gold);">
+      <div class="tool-icon">🔐</div>
+      <div class="tool-name">BLOFIN</div>
+      <div class="tool-desc">Crypto derivatives exchange. Use the demo account to practice low-risk trading before touching real capital. Great for learning futures mechanics.</div>
+      <a href="https://blofin.com" target="_blank" class="tool-link" style="color:var(--gold);border-bottom-color:rgba(251,191,36,0.3);">Open Blofin ↗</a>
+      <div class="vpn-note">⚠️ VPN required depending on your region. Use a free option like ProtonVPN and connect through a Chicago / US server.</div>
     </div>
   </div>
-  <!-- END FREE RESOURCES -->
-
-</div>
-</div>
-
+</section>
+<section class="section fade-up">
+  <div class="section-eyebrow">MARKET INTEL</div>
+  <h2 class="section-title">THE NEWS <span>DESK</span></h2>
+  <p class="section-intro">Two feeds. One for the macro picture, one for the exact economic events that move markets.</p>
+  <div class="news-grid">
+    <div class="news-card">
+      <div class="news-icon">🌐</div>
+      <div class="news-name">WORLD MONITOR</div>
+      <div class="news-desc">Real-time global market news. Keep a tab open during your trading session.</div>
+      <a href="https://www.worldmonitor.app" target="_blank" class="news-link">Open WorldMonitor ↗</a>
+    </div>
+    <div class="news-card">
+      <div class="news-icon">🗓️</div>
+      <div class="news-name">FOREX FACTORY</div>
+      <div class="news-desc">The economic calendar. Know what news is dropping before the market moves. High-impact events = high volatility.</div>
+      <a href="https://www.forexfactory.com/calendar" target="_blank" class="news-link">Open Calendar ↗</a>
+    </div>
+  </div>
+</section>
+<section class="section fade-up">
+  <div class="section-eyebrow">REAL TALK</div>
+  <h2 class="section-title">THE <span>TRUTH</span></h2>
+  <div class="disclaimer-box">
+    <div class="disclaimer-title">[ BEFORE YOU TRADE REAL MONEY ]</div>
+    <div class="disclaimer-text">
+      <p style="margin-bottom:1rem;"><strong>Practice on demo until you fully understand support and resistance.</strong> Not just the concept — until you can spot them cold, under pressure, in real time. That's the standard. Don't move to real capital until you're there.</p>
+      <p style="margin-bottom:1rem;">Demo trading isn't fake. It's rep work. Every hour on a paper account is building the pattern recognition that keeps you from blowing a real account in week one.</p>
+      <p><strong>Be careful who you learn from.</strong> The right teacher changes lives. The wrong one destroys accounts and shakes confidence for years. If they're selling the lifestyle before they're teaching the craft, walk away. Study the charts, not the personality.</p>
+    </div>
+  </div>
+</section>
+<footer>
+  <div>TAM<span style="color:var(--teal);">2</span>REAL TRADER UNIVERSITY &nbsp;▶&nbsp; <a href="index.html">Network</a> &nbsp;▶&nbsp; <a href="tam2real-system.html">The System</a> &nbsp;▶&nbsp; <a href="tam2realiron.html">Iron</a></div>
+  <div style="margin-top:8px;opacity:0.5;">This is not financial advice. Study first. Trade smart.</div>
+</footer>
 <script>
-const questions = [
-  {
-    q: "What happens to your money sitting in a savings account over time?",
-    opts: ["It grows faster than inflation","It slowly loses buying power due to inflation","It doubles every year","Nothing changes"],
-    correct: 1,
-    feedback: { good: "Exactly. Inflation (~3-4%/yr) eats your savings. That's why investing beats saving.", bad: "Actually — inflation slowly erodes the value of cash sitting still. Savings accounts rarely beat inflation." }
-  },
-  {
-    q: "What is the '4% Rule' in personal finance?",
-    opts: [
-      "Withdraw 4% of your portfolio per year so your money never runs out",
-      "Save 4% of your income each month",
-      "Pay 4% interest on all loans",
-      "Only invest in things with 4% returns"
-    ],
-    correct: 0,
-    feedback: { good: "Let's go! 4% withdrawal rate = your money keeps growing while you live off it. That's financial freedom.", bad: "The 4% Rule = once you hit your freedom number, withdraw 4%/year and your money historically never runs out." }
-  },
-  {
-    q: "If you spend $50,000 per year, what is your financial freedom number (25x rule)?",
-    opts: ["$500,000","$750,000","$1,000,000","$1,250,000"],
-    correct: 3,
-    feedback: { good: "Correct! $50,000 × 25 = $1,250,000. Hit that, withdraw 4%, you're free.", bad: "$50,000 × 25 = $1,250,000. That's your target. At that point, 4% covers your expenses every year." }
-  },
-  {
-    q: "What should you do FIRST before investing or trading?",
-    opts: ["Buy crypto immediately","Build a 3-6 month emergency fund","Open a brokerage account","Pay for trading courses"],
-    correct: 1,
-    feedback: { good: "Real talk. Emergency fund first. No safety net = one bad month wipes your whole plan.", bad: "Emergency fund always comes first. Without it, one unexpected expense forces you to sell investments at the wrong time." }
-  }
-];
-
-let current = 0;
-let score = 0;
-let answered = false;
-
-function showQuiz() {
-  document.getElementById('gate-age').classList.add('gone');
-  document.getElementById('gate-quiz').classList.remove('gone');
-  renderQuestion();
-}
-
-function denyAge() {
-  document.getElementById('gate-age').classList.add('gone');
-  document.getElementById('gate-denied').classList.remove('gone');
-}
-
-function renderQuestion() {
-  answered = false;
-  const q = questions[current];
-  document.getElementById('quiz-qnum').textContent = `Question ${current + 1} of ${questions.length}`;
-  document.getElementById('quiz-question').textContent = q.q;
-  document.getElementById('quiz-feedback').textContent = '';
-  document.getElementById('quiz-feedback').className = 'quiz-feedback';
-  document.getElementById('quiz-next').classList.remove('show');
-  document.getElementById('quiz-progress').style.width = (current / questions.length * 100) + '%';
-
-  const opts = document.getElementById('quiz-options');
-  opts.innerHTML = '';
-  q.opts.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'quiz-opt';
-    btn.textContent = opt;
-    btn.onclick = () => selectAnswer(i);
-    opts.appendChild(btn);
-  });
-}
-
-function selectAnswer(idx) {
-  if (answered) return;
-  answered = true;
-  const q = questions[current];
-  const opts = document.querySelectorAll('.quiz-opt');
-  const fb = document.getElementById('quiz-feedback');
-  const nextBtn = document.getElementById('quiz-next');
-
-  opts.forEach((btn, i) => {
-    if (i === q.correct) btn.classList.add('correct');
-    else if (i === idx && idx !== q.correct) btn.classList.add('wrong');
-    else btn.classList.add('disabled');
-  });
-
-  if (idx === q.correct) {
-    score++;
-    fb.textContent = '✅ ' + q.feedback.good;
-    fb.className = 'quiz-feedback good';
-  } else {
-    fb.textContent = '❌ ' + q.feedback.bad;
-    fb.className = 'quiz-feedback bad';
-  }
-
-  nextBtn.textContent = current < questions.length - 1 ? 'Next →' : 'See Results →';
-  nextBtn.classList.add('show');
-}
-
-function nextQuestion() {
-  current++;
-  if (current >= questions.length) {
-    showResult();
-  } else {
-    renderQuestion();
-  }
-}
-
-function showResult() {
-  document.getElementById('quiz-progress').style.width = '100%';
-  if (score >= 3) {
-    // Pass — redirect to Trader University
-    document.getElementById('gate-quiz').innerHTML = `
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:4px;margin-bottom:0.5rem;">TAM<span style="color:#e63946">2</span>REAL</div>
-      <div style="font-size:64px;margin:1rem 0;">🎓</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,6vw,52px);letter-spacing:2px;margin-bottom:0.75rem;line-height:1;">YOU'RE READY.<br>LET'S GET IT.</div>
-      <p style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:rgba(240,239,244,0.6);letter-spacing:0.06em;margin-bottom:2rem;">Taking you to Trader University now...</p>
-      <div style="width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;margin:0 auto;">
-        <div id="redirect-bar" style="height:100%;background:#ffd166;width:0%;transition:width 2s ease;border-radius:2px;"></div>
-      </div>
-    `;
-    setTimeout(() => {
-      document.getElementById('redirect-bar').style.width = '100%';
-    }, 100);
-    setTimeout(() => {
-      window.location.href = 'https://beacons.ai/traderuniversity';
-    }, 2200);
-  } else {
-    document.getElementById('gate-quiz').classList.add('gone');
-    document.getElementById('gate-failed').classList.remove('gone');
-  }
-}
-
-function resetQuiz() {
-  current = 0; score = 0; answered = false;
-  document.getElementById('gate-failed').classList.add('gone');
-  document.getElementById('gate-quiz').classList.remove('gone');
-  renderQuestion();
-}
-
-// Check session
-if (sessionStorage.getItem('traderU')) {
-  document.getElementById('gate-age').classList.add('gone');
-  document.getElementById('main-content').classList.add('visible');
-}
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+const obs = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 </script>
-
-<!-- TAM2REAL ECOSYSTEM BAR -->
-<div id="ecosystem-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(5,5,8,0.97);border-top:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:48px;font-family:'Barlow Condensed',sans-serif;">
-  <a href="index.html" style="font-size:14px;font-weight:900;letter-spacing:3px;color:#e63946;text-decoration:none;flex-shrink:0;">TAM<span style="color:#f0eff4;">2</span>REAL</a>
-  <div style="display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1;justify-content:center;padding:0 1rem;">
-    <a href="index.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;transition:color 0.2s;" onmouseover="this.style.color='#f0eff4'" onmouseout="this.style.color='#6b6b80'">🏠 Home</a>
-    <a href="trader-university.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#ffd166'" onmouseout="this.style.color='#6b6b80'">🎓 Trader U</a>
-    <a href="pack.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#22c55e'" onmouseout="this.style.color='#6b6b80'">🍃 Pack</a>
-    <a href="highly_elevated.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#22c55e'" onmouseout="this.style.color='#6b6b80'">🌿 Highly Elevated</a>
-    <a href="niko_tha_barber.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#2de4d4'" onmouseout="this.style.color='#6b6b80'">✂️ Niko</a>
-    <a href="agency/agency.html" style="padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b80;text-decoration:none;white-space:nowrap;" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='#6b6b80'">🔨 TamBuilds</a>
-  </div>
-  <button onclick="document.getElementById('ecosystem-bar').style.display='none'" style="background:none;border:none;color:#6b6b80;cursor:pointer;font-size:16px;padding:4px 8px;flex-shrink:0;">✕</button>
-</div>
-<div style="height:48px;"></div>
-<!-- END ECOSYSTEM BAR -->
 </body>
 </html>
